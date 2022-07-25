@@ -7,8 +7,11 @@ using CallCenterDashboard.Data;
 using JasonShave.Azure.Communication.Service.EventHandler;
 using JasonShave.Azure.Communication.Service.EventHandler.CallingServer;
 using Microsoft.AspNetCore.Mvc;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddMudServices();
 
 builder.Services.AddEventHandlerServices(option => option.PropertyNameCaseInsensitive = true)
     .AddCallingServerEventHandling();

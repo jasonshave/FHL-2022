@@ -1,8 +1,35 @@
 ﻿@inherits LayoutComponentBase
 
-<PageTitle>CallCenterDashboard</PageTitle>
+<MudThemeProvider @bind-IsDarkMode="darkModeEnabled"/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
 
-<div class="page">
+<PageTitle>Call Center Dashboard</PageTitle>
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@(e => DrawerToggle())" />
+        <MudSpacer />
+        @if (darkModeEnabled)
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.WbSunny" Color="Color.Default" OnClick="SetMode"/>
+        }
+        else
+        {
+            <MudIconButton Icon="@Icons.Material.Outlined.DarkMode" Color="Color.Inherit" OnClick="SetMode"/>
+        }
+        <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" Edge="Edge.End" />
+    </MudAppBar>
+    <NavMenu DrawerOpen="drawerOpen"/>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+
+@*<div class="page">
     <div class="sidebar">
         <NavMenu />
     </div>
@@ -16,4 +43,20 @@
             @Body
         </article>
     </main>
-</div>
+</div>*@
+@code{
+
+    bool drawerOpen = true;
+    bool darkModeEnabled;
+
+    void SetMode()
+    {
+        darkModeEnabled = !darkModeEnabled;
+        StateHasChanged();
+    }
+
+    void DrawerToggle()
+    {
+        drawerOpen = !drawerOpen;
+    }
+}

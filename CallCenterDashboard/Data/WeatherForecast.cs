@@ -1,4 +1,4 @@
-namespace CallCenterDashboard.App.Data
+namespace CallCenterDashboard.Data
 {
     public class WeatherForecast
     {

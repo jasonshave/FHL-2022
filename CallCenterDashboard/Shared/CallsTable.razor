@@ -1,0 +1,53 @@
+﻿@using Azure.Communication.CallingServer
+@using JasonShave.Azure.Communication.Service.CallingServer.Sdk.Contracts.V2022_11_1_preview.Events
+@using JasonShave.Azure.Communication.Service.EventHandler.CallingServer
+@inject CallingServerClient callingServerClient;
+@inject ICallingServerEventSubscriber callingServerEventSubscriber;
+@inject IConfiguration configuration;
+
+<h3>CallsTable</h3>
+
+@foreach (var callConnection in _callConnections)
+{
+    <div>CallConnectionId: @callConnection.Value.CallConnectionId is @callConnection.Value.State</div>
+}
+
+@code {
+    private readonly Dictionary<string, (string CallConnectionId, CallConnectionState? State)> _callConnections = new();
+
+    protected override void OnInitialized()
+    {
+        callingServerEventSubscriber.OnIncomingCall += HandleIncomingCall;
+        callingServerEventSubscriber.OnCallConnected += HandleCallConnected;
+        callingServerEventSubscriber.OnCallDisconnected += HandleCallDisconnected;
+    }
+
+    private async ValueTask HandleIncomingCall(IncomingCall incomingCall, string? contextId)
+    {
+        var baseUri = configuration["ACS:CallbackBaseUri"];
+        var answerUri = new Uri($"{baseUri}/api/calls/{incomingCall.CorrelationId}");
+
+        AnswerCallResult answerCallResult = await callingServerClient.AnswerCallAsync(incomingCall.IncomingCallContext, answerUri);
+        _callConnections.Add(answerCallResult.CallProperties.CallConnectionId, new (answerCallResult.CallProperties.CallConnectionId, answerCallResult.CallProperties.CallConnectionState));
+
+        StateHasChanged();
+    }
+    
+    private ValueTask HandleCallConnected(CallConnected callConnected, string? contextId)
+    {
+        _callConnections[callConnected.CallConnectionId] = (callConnected.CallConnectionId, CallConnectionState.Connected);
+
+        InvokeAsync(StateHasChanged);
+
+        return ValueTask.CompletedTask;
+    }
+
+    private ValueTask HandleCallDisconnected(CallDisconnected callDisconnected, string? contextId)
+    {
+        _callConnections.Remove(callDisconnected.CallConnectionId);
+        InvokeAsync(StateHasChanged);
+
+        return ValueTask.CompletedTask;
+    }
+
+}

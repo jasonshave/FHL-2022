@@ -92,4 +92,19 @@ public class CallingServerEffects
             dispatcher.Dispatch(new CallingServerNotifyAction(notification));
         }
     }
+
+    [EffectMethod]
+    public async Task OnRemoveParticipant(CallingServerRemoveParticipantAction action, IDispatcher dispatcher)
+    {
+        try
+        {
+            RemoveParticipantsResult result = await _callingServerClient.GetCallConnection(action.CallData.ConnectionId)
+                .RemoveParticipantsAsync(new []{action.UserToRemove});
+        }
+        catch (RequestFailedException e)
+        {
+            var notification = new NotificationData("Remove participant failed.", nameof(CallingServerRemoveParticipantAction), Severity.Error);
+            dispatcher.Dispatch(new CallingServerNotifyAction(notification));
+        }
+    }
 }

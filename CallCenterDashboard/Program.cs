@@ -3,7 +3,6 @@ using Azure.Communication.CallingServer;
 using Azure.Messaging;
 using Azure.Messaging.EventGrid;
 using Azure.Messaging.EventGrid.SystemEvents;
-using CallCenterDashboard.Data;
 using JasonShave.Azure.Communication.Service.EventHandler;
 using JasonShave.Azure.Communication.Service.EventHandler.CallingServer;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +20,6 @@ builder.Services.AddSingleton(new CallingServerClient(builder.Configuration["ACS
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();
 

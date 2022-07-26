@@ -1,13 +1,17 @@
 ﻿@page "/"
+@using CallCenterDashboard.Features.ActiveCalls
+
+@inherits FluxorComponent
+@inject IState<ActiveCallsState> activeCallsState
 
 <PageTitle>Contact Center Dashboard</PageTitle>
 
 <MudContainer>
     <MudText Typo="Typo.h2">Contact Center Dashboard</MudText>
     
-    @if (callData.Any())
+    @if (activeCallsState.Value.CallData.Any())
     {
-        <CallsTable CallData="callData"/>
+        <CallsTable/>
     }
     else
     {
@@ -17,24 +21,5 @@
 
 @code
 {
-    private IEnumerable<CallData> callData = new List<CallData>();
-
-    protected override void OnInitialized()
-    {
-        PopulateDummyData();
-    }
-
-    void PopulateDummyData()
-    {
-        callData = new List<CallData>
-        {
-            new("4:+14255551212",
-                "8:acs:11bf4525-61c8-416c-b2f1-369044ac8e03_d8c8e3ee-12ab-4217-a0ef-594b4969b6a6",
-                TimeSpan.FromMinutes(1),
-                "87068c3b-48b5-4342-8c84-aa54dbc531a6",
-                "543a3953-35f1-4ea8-86ae-4da6cb8f2fd8")
-        };
-
-        StateHasChanged();
-    }
+    
 }

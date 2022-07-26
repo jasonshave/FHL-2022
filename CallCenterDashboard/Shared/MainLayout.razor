@@ -1,4 +1,6 @@
-﻿@inherits LayoutComponentBase
+﻿@using CallCenterDashboard.Features.CallingServer
+@inherits LayoutComponentBase
+@inject IDispatcher dispatcher
 
 <MudThemeProvider @bind-IsDarkMode="darkModeEnabled"/>
 <MudDialogProvider/>
@@ -29,9 +31,13 @@
 </MudLayout>
 
 @code{
-
     bool drawerOpen = true;
     bool darkModeEnabled;
+
+    protected override void OnInitialized()
+    {
+        dispatcher.Dispatch(new CallingServerInitializeAction());
+    }
 
     void SetMode()
     {

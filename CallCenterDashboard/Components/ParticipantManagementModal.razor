@@ -1,0 +1,30 @@
+﻿<MudDialog>
+    <DialogContent>
+        <MudText>@ContentText</MudText>
+        <MudTextField @bind-Value="@user" Label="Standard" Variant="Variant.Text"/>
+        <AcsIdPicker ReceiveSelection="ReceiveSelection"/>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@ButtonText</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public string ContentText { get; set; }
+    [Parameter] public string ButtonText { get; set; }
+    [Parameter] public Color Color { get; set; }
+    [Parameter] public ParticipantModalChoice Choice { get; set; }
+
+    private string user;
+    private UserTypeEnum selection;
+
+    void Submit() => MudDialog.Close(DialogResult.Ok(new ParticipantManagementModalResponse(user, selection)));
+    void Cancel() => MudDialog.Cancel();
+
+    void ReceiveSelection(UserTypeEnum userType)
+    {
+        selection = userType;
+    }
+}

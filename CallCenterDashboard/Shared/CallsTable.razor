@@ -1,53 +1,55 @@
-﻿@using Azure.Communication.CallingServer
-@using JasonShave.Azure.Communication.Service.CallingServer.Sdk.Contracts.V2022_11_1_preview.Events
-@using JasonShave.Azure.Communication.Service.EventHandler.CallingServer
-@inject CallingServerClient callingServerClient;
-@inject ICallingServerEventSubscriber callingServerEventSubscriber;
-@inject IConfiguration configuration;
+﻿@using CallCenterDashboard.Models
+@using Azure.Communication.CallingServer
+@using Azure.Communication
 
-<h3>CallsTable</h3>
+<MudTable Items="@CallData" Hover="true" Breakpoint="Breakpoint.Sm" T="CallData">
+    <HeaderContent>
+        <MudTh>From</MudTh>
+        <MudTh>To</MudTh>
+        <MudTh>Call Duration</MudTh>
+        <MudTh>Connection ID</MudTh>
+        <MudTh>Correlation ID</MudTh>
+        <MudTh>Hang up</MudTh>
+        <MudTh>Terminate</MudTh>
+        <MudTh>Add</MudTh>
+        <MudTh>Remove</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="From">@context.From</MudTd>
+        <MudTd DataLabel="To">@context.To</MudTd>
+        <MudTd DataLabel="Call Duration">@context.CallDuration</MudTd>
+        <MudTd DataLabel="Connection ID">@context.ConnectionId</MudTd>
+        <MudTd DataLabel="Correlation ID">@context.CorrelationId</MudTd>
+        <MudTd>
+            <MudIconButton @onclick="async () => await HangUp.InvokeAsync(context)" Icon="@Icons.Material.Filled.PhoneDisabled"/>
+        </MudTd>
+        <MudTd>
+            <MudIconButton @onclick="async () => await Terminate.InvokeAsync(context)" Icon="@Icons.Material.Filled.GroupRemove"></MudIconButton>
+        </MudTd>
+        <MudTd>
+            <MudIconButton @onclick="async () => await ProcessAddParticipant(context)" Icon="@Icons.Material.Filled.PersonAdd"></MudIconButton>
+        </MudTd>
+        <MudTd>
+            <MudIconButton @onclick="async () => await ProcessRemoveParticipant(context)" Icon="@Icons.Material.Filled.PersonRemove"></MudIconButton>
+        </MudTd>
+    </RowTemplate>
+</MudTable>
 
-@foreach (var callConnection in _callConnections)
-{
-    <div>CallConnectionId: @callConnection.Value.CallConnectionId is @callConnection.Value.State</div>
-}
 
 @code {
-    private readonly Dictionary<string, (string CallConnectionId, CallConnectionState? State)> _callConnections = new();
+    [Parameter] public IEnumerable<CallData> CallData { get; set; }
+    [Parameter] public EventCallback<CallData> HangUp { get; set; }
+    [Parameter] public EventCallback<CallData> Terminate { get; set; }
+    [Parameter] public EventCallback<CommunicationIdentifier> UserToAdd { get; set; }
+    [Parameter] public EventCallback<CommunicationIdentifier> UserToRemove { get; set; }
 
-    protected override void OnInitialized()
+    async ValueTask ProcessAddParticipant(CallData callData)
     {
-        callingServerEventSubscriber.OnIncomingCall += HandleIncomingCall;
-        callingServerEventSubscriber.OnCallConnected += HandleCallConnected;
-        callingServerEventSubscriber.OnCallDisconnected += HandleCallDisconnected;
+        // todo: wire up modal
     }
 
-    private async ValueTask HandleIncomingCall(IncomingCall incomingCall, string? contextId)
+    async ValueTask ProcessRemoveParticipant(CallData callData)
     {
-        var baseUri = configuration["ACS:CallbackBaseUri"];
-        var answerUri = new Uri($"{baseUri}/api/calls/{incomingCall.CorrelationId}");
-
-        AnswerCallResult answerCallResult = await callingServerClient.AnswerCallAsync(incomingCall.IncomingCallContext, answerUri);
-        _callConnections.Add(answerCallResult.CallProperties.CallConnectionId, new (answerCallResult.CallProperties.CallConnectionId, answerCallResult.CallProperties.CallConnectionState));
-
-        StateHasChanged();
+        // todo: wire up modal
     }
-    
-    private ValueTask HandleCallConnected(CallConnected callConnected, string? contextId)
-    {
-        _callConnections[callConnected.CallConnectionId] = (callConnected.CallConnectionId, CallConnectionState.Connected);
-
-        InvokeAsync(StateHasChanged);
-
-        return ValueTask.CompletedTask;
-    }
-
-    private ValueTask HandleCallDisconnected(CallDisconnected callDisconnected, string? contextId)
-    {
-        _callConnections.Remove(callDisconnected.CallConnectionId);
-        InvokeAsync(StateHasChanged);
-
-        return ValueTask.CompletedTask;
-    }
-
 }

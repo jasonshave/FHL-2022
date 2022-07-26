@@ -1,6 +1,11 @@
-﻿namespace CallCenterDashboard.Features.ActiveCalls;
+﻿using CallCenterDashboard.Models;
+using Fluxor;
 
-public class ActiveCallsFeature
+namespace CallCenterDashboard.Features.ActiveCalls;
+
+public class ActiveCallsFeature : Feature<ActiveCallsState>
 {
-    
+    public override string GetName() => "ActiveCalls";
+
+    protected override ActiveCallsState GetInitialState() => new(false, false, Array.Empty<CallData>());
 }

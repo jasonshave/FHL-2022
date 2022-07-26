@@ -12,4 +12,4 @@ public record ActiveCallsAddAction(CallData CallData);
 
 public record ActiveCallsRemoveAction(CallData CallData);
 
-public record ActiveCallsNotifyAction(ApiResponse Response);
+public record ActiveCallsNotifyAction(NotificationData NotificationData);

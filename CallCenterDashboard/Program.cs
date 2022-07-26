@@ -3,7 +3,6 @@ using Azure.Communication.CallingServer;
 using Azure.Messaging;
 using Azure.Messaging.EventGrid;
 using Azure.Messaging.EventGrid.SystemEvents;
-using CallCenterDashboard.Data;
 using Fluxor;
 using JasonShave.Azure.Communication.Service.EventHandler;
 using JasonShave.Azure.Communication.Service.EventHandler.CallingServer;

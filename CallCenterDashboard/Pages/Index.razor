@@ -1,16 +1,23 @@
 ﻿@page "/"
-@using CallCenterDashboard.Models
 
 <PageTitle>Contact Center Dashboard</PageTitle>
 
 <MudContainer>
     <MudText Typo="Typo.h2">Contact Center Dashboard</MudText>
-    <CallsTable CallData="callData"/>
+    
+    @if (callData.Any())
+    {
+        <CallsTable CallData="callData"/>
+    }
+    else
+    {
+        <MudText>No active calls present...</MudText>
+    }
 </MudContainer>
 
 @code
 {
-    private IEnumerable<CallData> callData;
+    private IEnumerable<CallData> callData = new List<CallData>();
 
     protected override void OnInitialized()
     {

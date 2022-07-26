@@ -2,8 +2,9 @@
 
 public enum ResponseEnum
 {
+    Information,
     Success,
     Warning,
-    Fail,
+    Error,
     Unknown
 }

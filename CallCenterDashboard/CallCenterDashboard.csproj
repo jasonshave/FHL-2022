@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Folder Include="Features\CallingServer\" />
     <Folder Include="Services\" />
   </ItemGroup>
 

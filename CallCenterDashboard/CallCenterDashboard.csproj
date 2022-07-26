@@ -10,12 +10,14 @@
   <ItemGroup>
     <PackageReference Include="Azure.Communication.CallingServer" Version="1.0.0-alpha.20220725.1" />
     <PackageReference Include="Azure.Messaging.EventGrid" Version="4.11.0" />
+    <PackageReference Include="Fluxor.Blazor.Web" Version="5.4.0" />
     <PackageReference Include="JasonShave.Azure.Communication.Service.EventHandler.CallingServer" Version="1.0.0-alpha-2022-07-21.1" />
     <PackageReference Include="MudBlazor" Version="6.0.12" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Folder Include="Features\CallingServer\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

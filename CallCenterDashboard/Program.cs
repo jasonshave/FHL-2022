@@ -4,6 +4,7 @@ using Azure.Messaging;
 using Azure.Messaging.EventGrid;
 using Azure.Messaging.EventGrid.SystemEvents;
 using CallCenterDashboard.Data;
+using Fluxor;
 using JasonShave.Azure.Communication.Service.EventHandler;
 using JasonShave.Azure.Communication.Service.EventHandler.CallingServer;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +16,10 @@ builder.Services.AddMudServices();
 
 builder.Services.AddEventHandlerServices(option => option.PropertyNameCaseInsensitive = true)
     .AddCallingServerEventHandling();
-
 builder.Services.AddSingleton(new CallingServerClient(builder.Configuration["ACS:ConnectionString"]));
 
-// Add services to the container.
+builder.Services.AddFluxor(x => x.ScanAssemblies(typeof(Program).Assembly));
+
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();

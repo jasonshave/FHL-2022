@@ -10,6 +10,6 @@ public record ActiveCallsSetInitializedAction();
 
 public record ActiveCallsAddAction(CallData CallData);
 
-public record ActiveCallsRemoveAction(CallData CallData);
+public record ActiveCallsRemoveAction(string CallConnectionId);
 
 public record ActiveCallsNotifyAction(NotificationData NotificationData);

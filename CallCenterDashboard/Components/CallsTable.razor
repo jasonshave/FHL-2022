@@ -3,12 +3,15 @@
 @using Azure.Communication
 @using CallCenterDashboard.Features.ActiveCalls
 @using CallCenterDashboard.Features.CallingServer
+@using CallCenterDashboard.Misc
 
 @inherits FluxorComponent
 @inject IDispatcher dispatcher
 @inject ISnackbar snackbar
+@inject IState<ActiveCallsState> activeCallState
+@inject IDialogService DialogService
 
-<MudTable Items="@CallData" Hover="true" Breakpoint="Breakpoint.Sm" T="CallData">
+<MudTable Items="@activeCallState.Value.CallData" Hover="true" Breakpoint="Breakpoint.Sm" T="CallData">
     <HeaderContent>
         <MudTh>From</MudTh>
         <MudTh>To</MudTh>
@@ -23,30 +26,25 @@
     <RowTemplate>
         <MudTd DataLabel="From">@context.From</MudTd>
         <MudTd DataLabel="To">@context.To</MudTd>
-        <MudTd DataLabel="Call Duration">@context.CallDuration</MudTd>
+        <MudTd DataLabel="Call Duration">@context.CallStartTime</MudTd>
         <MudTd DataLabel="Connection ID">@context.ConnectionId</MudTd>
         <MudTd DataLabel="Correlation ID">@context.CorrelationId</MudTd>
         <MudTd>
             <HangUpButton CallData="context"/>
         </MudTd>
         <MudTd>
-            <MudIconButton @onclick="async () => await Terminate.InvokeAsync(context)" Icon="@Icons.Material.Filled.GroupRemove"></MudIconButton>
+            <TerminateButton CallData="context"/>
         </MudTd>
         <MudTd>
-            <MudIconButton @onclick="async () => await ProcessAddParticipant(context)" Icon="@Icons.Material.Filled.PersonAdd"></MudIconButton>
+            <MudIconButton @onclick="async () => await AddParticipant(context)" Icon="@Icons.Material.Filled.PersonAdd"></MudIconButton>
         </MudTd>
         <MudTd>
-            <MudIconButton @onclick="async () => await ProcessRemoveParticipant(context)" Icon="@Icons.Material.Filled.PersonRemove"></MudIconButton>
+            <MudIconButton @onclick="async () => await RemoveParticipant(context)" Icon="@Icons.Material.Filled.PersonRemove"></MudIconButton>
         </MudTd>
     </RowTemplate>
 </MudTable>
 
 @code {
-    [Parameter] public IEnumerable<CallData> CallData { get; set; }
-    [Parameter] public EventCallback<CallData> HangUp { get; set; }
-    [Parameter] public EventCallback<CallData> Terminate { get; set; }
-    [Parameter] public EventCallback<CommunicationIdentifier> UserToAdd { get; set; }
-    [Parameter] public EventCallback<CommunicationIdentifier> UserToRemove { get; set; }
 
     protected override void OnInitialized()
     {
@@ -59,16 +57,33 @@
 
     void ToastIt(CallingServerNotifyAction action)
     {
-        snackbar.Add(action.NotificationData.Message, action.NotificationData.Severity, (options) => options.CloseAfterNavigation = true);
+        snackbar.Add(action.NotificationData.Message, action.NotificationData.Severity, (options) =>
+        {
+            options.CloseAfterNavigation = true;
+        });
     }
 
-    async ValueTask ProcessAddParticipant(CallData callData)
+    async Task AddParticipant(CallData callData)
     {
-        // todo: wire up modal
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText", "Type a participant to add");
+        parameters.Add("ButtonText", "Add");
+        parameters.Add("Color", Color.Success);
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialogResult = DialogService.Show<ParticipantManagementModal>("Add participant", parameters, options);
+        var result = await dialogResult.Result;
+
+        if (!result.Cancelled)
+        {
+            var output = result.Data as ParticipantManagementModalResponse;
+            dispatcher.Dispatch(new CallingServerAddParticipantAction(callData, output.UserType.Convert(output.Id)));
+        }
     }
 
-    async ValueTask ProcessRemoveParticipant(CallData callData)
+    async Task RemoveParticipant(CallData callData)
     {
-        // todo: wire up modal
+
     }
 }

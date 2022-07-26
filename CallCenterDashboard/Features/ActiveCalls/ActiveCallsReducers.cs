@@ -1,4 +1,5 @@
-﻿using Fluxor;
+﻿using CallCenterDashboard.Models;
+using Fluxor;
 
 namespace CallCenterDashboard.Features.ActiveCalls;
 
@@ -10,6 +11,24 @@ public static class ActiveCallsReducers
         {
             CallData = action.CallData,
             Loading = false
+        };
+
+    [ReducerMethod]
+    public static ActiveCallsState OnAddDataAction(ActiveCallsState state, ActiveCallsAddAction action)
+    {
+        var newList = new List<CallData> { action.CallData };
+        newList.AddRange(state.CallData);
+        return state with
+        {
+            CallData = newList
+        };
+    }
+
+    [ReducerMethod]
+    public static ActiveCallsState OnRemoveDataAction(ActiveCallsState state, ActiveCallsRemoveAction action) =>
+        state with
+        {
+            CallData = state.CallData.Where(x => x.ConnectionId != action.CallConnectionId)
         };
 
     [ReducerMethod(typeof(ActiveCallsLoadDataAction))]

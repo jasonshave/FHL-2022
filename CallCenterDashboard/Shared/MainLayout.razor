@@ -1,4 +1,5 @@
 ﻿@using CallCenterDashboard.Features.CallingServer
+@using CallCenterDashboard.Features.ActiveCalls
 @inherits LayoutComponentBase
 @inject IDispatcher dispatcher
 
@@ -27,6 +28,7 @@
         <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
             @Body
         </MudContainer>
+        <Notification/>
     </MudMainContent>
 </MudLayout>
 
@@ -37,6 +39,7 @@
     protected override void OnInitialized()
     {
         dispatcher.Dispatch(new CallingServerInitializeAction());
+        dispatcher.Dispatch(new ActiveCallsInitializeAction());
     }
 
     void SetMode()

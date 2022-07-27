@@ -2,11 +2,13 @@
 
 namespace CallCenterDashboard.Features.ActiveCalls;
 
-public record ActiveCallsLoadDataAction();
+public record ActiveCallsInitializeAction;
+
+public record ActiveCallsLoadDataAction;
 
 public record ActiveCallsSetDataAction(IEnumerable<CallData> CallData);
 
-public record ActiveCallsSetInitializedAction();
+public record ActiveCallsSetInitializedAction;
 
 public record ActiveCallsAddAction(CallData CallData);
 

@@ -1,0 +1,30 @@
+﻿@using CallCenterDashboard.Features.CallingServer
+@using System.ComponentModel.DataAnnotations
+@using CallCenterDashboard.Misc
+@inject IDispatcher dispatcher
+@inject IDialogService DialogService
+
+<MudIconButton @onclick="async () => await AddParticipant(CallData)" Icon="@Icons.Material.Filled.PersonAdd"/>
+
+@code {
+    [Parameter] [Required] public CallData CallData { get; set; }
+
+    async Task AddParticipant(CallData callData)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText", "Type a participant to add");
+        parameters.Add("ButtonText", "Add");
+        parameters.Add("Color", Color.Success);
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium};
+
+        var dialogResult = DialogService.Show<ParticipantManagementModal>("Add participant", parameters, options);
+        var result = await dialogResult.Result;
+
+        if (!result.Cancelled)
+        {
+            var output = result.Data as ParticipantManagementModalResponse;
+            dispatcher.Dispatch(new CallingServerAddParticipantAction(callData, output.UserType.Convert(output.Id)));
+        }
+    }
+}

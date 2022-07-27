@@ -26,14 +26,13 @@ public class CallingServerEffects
         _callingServerClient = callingServerClient;
     }
 
-    [EffectMethod]
-    public async Task OnInitialize(CallingServerInitializeAction action, IDispatcher dispatcher)
+    [EffectMethod(typeof(CallingServerInitializeAction))]
+    public async Task OnInitialize(IDispatcher dispatcher)
     {
         _callingServerEventSubscriber.OnCallConnected += (@event, contextId) =>
         {
-            var callData = _callDataRepository.Get(@event.CallConnectionId);
-            dispatcher.Dispatch(new ActiveCallsAddAction(callData));
-            dispatcher.Dispatch(new CallingServerNotifyAction(new NotificationData($"Call {@event.CallConnectionId} connected", "Answered", Severity.Success)));
+            var callData = _callDataRepository.Find(@event.CallConnectionId);
+            if (callData is not null) dispatcher.Dispatch(new ActiveCallsAddAction(callData));
             
             return ValueTask.CompletedTask;
         };
@@ -42,8 +41,6 @@ public class CallingServerEffects
         {
             _callDataRepository.Remove(@event.CallConnectionId);
             dispatcher.Dispatch(new ActiveCallsRemoveAction(@event.CallConnectionId));
-            dispatcher.Dispatch(new CallingServerNotifyAction(new NotificationData($"Call {@event.CallConnectionId} disconnected", "Hang up", Severity.Success)));
-
             return ValueTask.CompletedTask;
         };
     }
@@ -55,7 +52,7 @@ public class CallingServerEffects
 
         try
         {
-            await _callingServerClient.GetCallConnection(action.CallData.ConnectionId).HangupAsync(false);
+            await _callingServerClient.GetCallConnection(action.CallData.CallConnectionId).HangupAsync(false);
         }
         catch (RequestFailedException e)
         {
@@ -69,7 +66,7 @@ public class CallingServerEffects
     {
         try
         {
-            await _callingServerClient.GetCallConnection(action.CallData.ConnectionId).HangupAsync(true);
+            await _callingServerClient.GetCallConnection(action.CallData.CallConnectionId).HangupAsync(true);
         }
         catch (RequestFailedException e)
         {
@@ -83,7 +80,7 @@ public class CallingServerEffects
     {
         try
         {
-            AddParticipantsResult result = await _callingServerClient.GetCallConnection(action.CallData.ConnectionId)
+            AddParticipantsResult result = await _callingServerClient.GetCallConnection(action.CallData.CallConnectionId)
                 .AddParticipantsAsync(new []{action.UserToAdd});
         }
         catch (RequestFailedException e)
@@ -98,7 +95,7 @@ public class CallingServerEffects
     {
         try
         {
-            RemoveParticipantsResult result = await _callingServerClient.GetCallConnection(action.CallData.ConnectionId)
+            RemoveParticipantsResult result = await _callingServerClient.GetCallConnection(action.CallData.CallConnectionId)
                 .RemoveParticipantsAsync(new []{action.UserToRemove});
         }
         catch (RequestFailedException e)

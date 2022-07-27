@@ -1,0 +1,24 @@
+﻿@using CallCenterDashboard.Features.CallingServer
+@using CallCenterDashboard.Features.ActiveCalls
+@inherits FluxorComponent
+@inject ISnackbar snackbar
+
+@code {
+    protected override void OnInitialized()
+    {
+        snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomStart;
+
+        SubscribeToAction<CallingServerNotifyAction>(a => ToastIt(a.NotificationData));
+        SubscribeToAction<ActiveCallsNotifyAction>(a => ToastIt(a.NotificationData));
+    }
+
+    void ToastIt<T>(T action)
+        where T : NotificationData
+    {
+        snackbar.Add(action.Message, action.Severity, (options) =>
+        {
+            options.CloseAfterNavigation = true;
+        });
+        StateHasChanged();
+    }
+}

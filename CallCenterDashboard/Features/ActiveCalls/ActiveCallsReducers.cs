@@ -33,7 +33,7 @@ public static class ActiveCallsReducers
     public static ActiveCallsState OnRemoveDataAction(ActiveCallsState state, ActiveCallsRemoveAction action) =>
         state with
         {
-            CallData = state.CallData.Where(x => x.ConnectionId != action.CallConnectionId)
+            CallData = state.CallData.Where(x => x.CallConnectionId != action.CallConnectionId)
         };
 
     [ReducerMethod(typeof(ActiveCallsLoadDataAction))]

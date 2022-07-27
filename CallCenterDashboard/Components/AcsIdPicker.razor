@@ -1,7 +1,4 @@
-﻿@using Azure.Communication
-@using CallCenterDashboard.Models
-
-<MudSelect T="UserTypeEnum" @bind-Value="UserType" Label="Choose type" SelectedValuesChanged="() => ReceiveSelection.InvokeAsync(UserType)">
+﻿<MudSelect T="UserTypeEnum" @bind-Value="UserType" Label="Choose type" SelectedValuesChanged="() => ReceiveSelection.InvokeAsync(UserType)">
     <MudSelectItem Value="UserTypeEnum.AcsUser">ACS User</MudSelectItem>
     <MudSelectItem Value="UserTypeEnum.PhoneNumber">Phone Number</MudSelectItem>
     <MudSelectItem Value="UserTypeEnum.TeamsUser">Teams User</MudSelectItem>

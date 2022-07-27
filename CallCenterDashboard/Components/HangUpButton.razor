@@ -1,5 +1,4 @@
-﻿@using CallCenterDashboard.Features.CallingServer
-@using System.ComponentModel.DataAnnotations
+﻿@using System.ComponentModel.DataAnnotations
 @inject IDispatcher dispatcher
 
 <MudIconButton @onclick="() => dispatcher.Dispatch(new CallingServerHangUpAction(CallData))" Icon="@Icons.Material.Filled.GroupRemove"/>

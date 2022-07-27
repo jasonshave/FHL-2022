@@ -1,14 +1,6 @@
-﻿@using CallCenterDashboard.Models
-@using Azure.Communication.CallingServer
-@using Azure.Communication
-@using CallCenterDashboard.Features.ActiveCalls
-@using CallCenterDashboard.Features.CallingServer
-@using CallCenterDashboard.Misc
-
-@inherits FluxorComponent
+﻿@using CallCenterDashboard.Features.ActiveCalls
 @inject IDispatcher dispatcher
 @inject IState<ActiveCallsState> activeCallState
-
 
 <MudTable Items="@activeCallState.Value.CallData" Hover="true" Breakpoint="Breakpoint.Sm" T="CallData">
     <HeaderContent>
@@ -44,12 +36,9 @@
 </MudTable>
 
 @code {
-
     protected override void OnInitialized()
     {
-        dispatcher.Dispatch(new ActiveCallsLoadDataAction());
+        if(!activeCallState.Value.Initialized) dispatcher.Dispatch(new ActiveCallsInitializeAction());
         base.OnInitialized();
     }
-
-
 }

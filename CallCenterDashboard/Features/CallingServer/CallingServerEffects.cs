@@ -48,15 +48,13 @@ public class CallingServerEffects
     [EffectMethod]
     public async Task OnHangUp(CallingServerHangUpAction action, IDispatcher dispatcher)
     {
-        NotificationData notification;
-
         try
         {
             await _callingServerClient.GetCallConnection(action.CallData.CallConnectionId).HangupAsync(false);
         }
         catch (RequestFailedException e)
         {
-            notification = new NotificationData("Hang up failed.", nameof(CallingServerHangUpAction), Severity.Error);
+            var notification = new NotificationData("Hang up failed.", nameof(CallingServerHangUpAction), Severity.Error);
             dispatcher.Dispatch(new CallingServerNotifyAction(notification));
         }
     }

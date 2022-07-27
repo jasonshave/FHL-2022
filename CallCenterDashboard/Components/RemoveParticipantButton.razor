@@ -1,5 +1,4 @@
-﻿@using CallCenterDashboard.Features.CallingServer
-@using System.ComponentModel.DataAnnotations
+﻿@using System.ComponentModel.DataAnnotations
 @using CallCenterDashboard.Misc
 @inject IDispatcher dispatcher
 @inject IDialogService DialogService
@@ -9,18 +8,18 @@
 @code {
     [Parameter] [Required] public CallData CallData { get; set; }
 
+    private DialogParameters _parameters = new()
+    {
+        { "ContentText", "Type a participant to remove" },
+        { "ButtonText", "Remove" },
+        { "Color", Color.Success }
+    };
+
     async Task RemoveParticipant(CallData callData)
     {
-        var parameters = new DialogParameters
-        {
-            { "ContentText", "Type a participant to remove" },
-            { "ButtonText", "Remove" },
-            { "Color", Color.Success }
-        };
-
         var options = new DialogOptions() { CloseButton = true, };
 
-        var dialogResult = DialogService.Show<ParticipantManagementModal>("Remove participant", parameters, options);
+        var dialogResult = DialogService.Show<ParticipantManagementModal>("Remove participant", _parameters, options);
         var result = await dialogResult.Result;
 
         if (!result.Cancelled)

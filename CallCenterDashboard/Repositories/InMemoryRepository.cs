@@ -5,38 +5,29 @@ namespace CallCenterDashboard.Repositories
 {
     public class InMemoryRepository<T> : IRepository<T>
     {
-        private IDictionary<string, T> _data;
+        private readonly ConcurrentDictionary<string, T> _data = new ();
 
-        public InMemoryRepository()
-        {
-            _data = new ConcurrentDictionary<string, T>();
-        }
+        public void Add(string key, T value) => _data.TryAdd(key, value);
 
-        public void Add(string key, T value)
-        {
-            _data.TryAdd(key, value);
-        }
+        public bool Remove(string key) => _data.TryRemove(key, out _);
 
-        public void Remove(string key)
+        public T? Find(string key)
         {
-            _data.Remove(key);
-        }
-
-        public T Get(string key)
-        {
-            T value = default;
-            _data.TryGetValue(key, out value);
+            _data.TryGetValue(key, out var value);
             return value;
         }
 
-        public void Update(string key, T value)
+        public bool Update(string key, T value)
         {
-            _data[key] = value;
+            var comparisonValue = Find(key);
+            if (comparisonValue is not null)
+            {
+                return _data.TryUpdate(key, value, comparisonValue);
+            }
+
+            return false;
         }
 
-        public IEnumerable<KeyValuePair<string, T>>GetAll()
-        {
-            return _data.Select(record => record);
-        }
+        public IEnumerable<T>List() => _data.Values;
     }
 }

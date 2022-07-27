@@ -84,6 +84,20 @@
 
     async Task RemoveParticipant(CallData callData)
     {
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText", "Type a participant to remove");
+        parameters.Add("ButtonText", "Remove");
+        parameters.Add("Color", Color.Success);
 
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialogResult = DialogService.Show<ParticipantManagementModal>("Remove participant", parameters, options);
+        var result = await dialogResult.Result;
+
+        if (!result.Cancelled)
+        {
+            var output = result.Data as ParticipantManagementModalResponse;
+            dispatcher.Dispatch(new CallingServerRemoveParticipantAction(callData, output.UserType.Convert(output.Id)));
+        }
     }
 }

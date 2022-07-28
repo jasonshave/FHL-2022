@@ -3,7 +3,6 @@
 @using Azure.Communication
 @using CallCenterDashboard.Features.ActiveCalls
 @using CallCenterDashboard.Features.CallingServer
-@using CallCenterDashboard.Misc
 
 @inherits FluxorComponent
 @inject IDispatcher dispatcher
@@ -25,7 +24,7 @@
     <RowTemplate>
         <MudTd DataLabel="From">@context.From</MudTd>
         <MudTd DataLabel="To">@context.To</MudTd>
-        <MudTd DataLabel="Call Duration">@context.CallStartTime</MudTd>
+        <MudTd DataLabel="Duration(s)">@CalculateDuration(context.CallStartTime).Seconds</MudTd>
         <MudTd DataLabel="Connection ID">@context.CallConnectionId</MudTd>
         <MudTd DataLabel="Correlation ID">@context.CorrelationId</MudTd>
         <MudTd>
@@ -44,12 +43,28 @@
 </MudTable>
 
 @code {
+    Timer theTimer;
 
     protected override void OnInitialized()
     {
-        dispatcher.Dispatch(new ActiveCallsLoadDataAction());
+        theTimer = new Timer(Tick, null, 0, 1000);
         base.OnInitialized();
     }
 
+    private void Tick(object _)
+    {
+        dispatcher.Dispatch(new ActiveCallsLoadDataAction());
+        InvokeAsync(StateHasChanged);
+    }
 
+    private TimeSpan CalculateDuration(DateTimeOffset startTime)
+    {
+        return DateTimeOffset.UtcNow - startTime;
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        theTimer.Dispose();
+        base.Dispose(disposing);
+    }
 }

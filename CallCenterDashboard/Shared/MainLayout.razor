@@ -21,7 +21,6 @@
         {
             <MudIconButton Icon="@Icons.Material.Outlined.DarkMode" Color="Color.Inherit" OnClick="SetMode"/>
         }
-        <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" Edge="Edge.End" />
     </MudAppBar>
     <NavMenu DrawerOpen="drawerOpen"/>
     <MudMainContent>
@@ -40,6 +39,7 @@
     {
         dispatcher.Dispatch(new CallingServerInitializeAction());
         dispatcher.Dispatch(new ActiveCallsInitializeAction());
+        base.OnInitialized();
     }
 
     void SetMode()

@@ -10,6 +10,8 @@
 
         SubscribeToAction<CallingServerNotifyAction>(a => ToastIt(a.NotificationData));
         SubscribeToAction<ActiveCallsNotifyAction>(a => ToastIt(a.NotificationData));
+
+        base.OnInitialized();
     }
 
     void ToastIt<T>(T action)

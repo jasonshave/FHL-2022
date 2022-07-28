@@ -7,6 +7,17 @@ namespace CallCenterDashboard.Repositories
     {
         private readonly ConcurrentDictionary<string, T> _data = new ();
 
+        public InMemoryRepository(IDictionary<string, T>? preData = null)
+        {
+            if (preData is not null)
+            {
+                foreach (var (key, value) in preData)
+                {
+                    Add(key, value);
+                }
+            }
+        }
+
         public void Add(string key, T value) => _data.TryAdd(key, value);
 
         public bool Remove(string key) => _data.TryRemove(key, out _);

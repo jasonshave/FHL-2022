@@ -7,6 +7,8 @@
     {
         if(!callingServerState.Value.Initialized)
             dispatcher.Dispatch(new CallingServerInitializeAction());
+
+        base.OnInitialized();
     }
 
 }

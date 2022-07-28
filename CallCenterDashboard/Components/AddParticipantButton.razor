@@ -1,6 +1,7 @@
 ﻿@using CallCenterDashboard.Features.CallingServer
 @using System.ComponentModel.DataAnnotations
-@using CallCenterDashboard.Misc
+@using Azure.Communication
+
 @inject IDispatcher dispatcher
 @inject IDialogService DialogService
 
@@ -8,23 +9,24 @@
 
 @code {
     [Parameter] [Required] public CallData CallData { get; set; }
+    private DialogParameters _parameters = new()
+    {
+        { "ContentText", "Add participant" },
+        { "ButtonText", "Add" },
+        { "Color", Color.Success }
+    };
 
     async Task AddParticipant(CallData callData)
     {
-        var parameters = new DialogParameters();
-        parameters.Add("ContentText", "Type a participant to add");
-        parameters.Add("ButtonText", "Add");
-        parameters.Add("Color", Color.Success);
+        var options = new DialogOptions { CloseButton = true };
 
-        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium};
-
-        var dialogResult = DialogService.Show<ParticipantManagementModal>("Add participant", parameters, options);
+        var dialogResult = DialogService.Show<ParticipantManagementModal>("Add participant", _parameters, options);
         var result = await dialogResult.Result;
 
         if (!result.Cancelled)
         {
             var output = result.Data as ParticipantManagementModalResponse;
-            dispatcher.Dispatch(new CallingServerAddParticipantAction(callData, output.UserType.Convert(output.Id)));
+            dispatcher.Dispatch(new CallingServerAddParticipantAction(callData, CommunicationIdentifier.FromRawId(output.Id)));
         }
     }
 }

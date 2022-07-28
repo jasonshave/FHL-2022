@@ -1,5 +1,4 @@
 ﻿using Azure;
-using Azure.Communication;
 using Azure.Communication.CallingServer;
 using CallCenterDashboard.Features.ActiveCalls;
 using CallCenterDashboard.Interfaces;

@@ -20,7 +20,10 @@ builder.Services.AddMudServices();
 builder.Services.AddEventHandlerServices(option => option.PropertyNameCaseInsensitive = true)
     .AddCallingServerEventHandling();
 builder.Services.AddSingleton(new CallingServerClient(builder.Configuration["ACS:ConnectionString"]));
-builder.Services.AddSingleton<IRepository<CallData>, InMemoryRepository<CallData>>();
+builder.Services.AddSingleton<IRepository<CallData>>(new InMemoryRepository<CallData>(new Dictionary<string, CallData>
+{
+    {"effc9413-e8ef-4e51-b51b-497e63a8bbd7", new CallData("4:+14255551212", "8:acs:eba32226-8a75-47dc-afa3-cbbe8e84bc95_00000012-e271-a97e-3ef0-8b3a0d005038", DateTimeOffset.UtcNow, "a582fed2-71a4-4eb8-b59c-769a8bf86db2", "effc9413-e8ef-4e51-b51b-497e63a8bbd7")}
+}));
 builder.Services.AddHostedService<CallingEventSubscriber>();
 
 builder.Services.AddFluxor(x => x.ScanAssemblies(typeof(Program).Assembly));

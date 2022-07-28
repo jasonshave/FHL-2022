@@ -1,23 +1,23 @@
 ﻿@using System.ComponentModel.DataAnnotations
-@using CallCenterDashboard.Misc
+@using Azure.Communication
 @inject IDispatcher dispatcher
 @inject IDialogService DialogService
 
 <MudIconButton @onclick="async () => await RemoveParticipant(CallData)" Icon="@Icons.Material.Filled.PersonAdd"/>
 
 @code {
-    [Parameter] [Required] public CallData CallData { get; set; }
 
-    private DialogParameters _parameters = new()
+    [Parameter][Required] public CallData CallData { get; set; }
+    private DialogParameters _parameters = new ()
     {
-        { "ContentText", "Type a participant to remove" },
+        { "ContentText", "Remove participant" },
         { "ButtonText", "Remove" },
-        { "Color", Color.Success }
+        { "Color", Color.Error }
     };
 
     async Task RemoveParticipant(CallData callData)
     {
-        var options = new DialogOptions() { CloseButton = true, };
+        var options = new DialogOptions { CloseButton = true };
 
         var dialogResult = DialogService.Show<ParticipantManagementModal>("Remove participant", _parameters, options);
         var result = await dialogResult.Result;
@@ -25,7 +25,7 @@
         if (!result.Cancelled)
         {
             var output = result.Data as ParticipantManagementModalResponse;
-            dispatcher.Dispatch(new CallingServerRemoveParticipantAction(callData, output.UserType.Convert(output.Id)));
+            dispatcher.Dispatch(new CallingServerRemoveParticipantAction(callData, CommunicationIdentifier.FromRawId(output.Id)));
         }
     }
 }

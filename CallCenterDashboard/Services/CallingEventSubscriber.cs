@@ -37,7 +37,6 @@ public class CallingEventSubscriber : BackgroundService
 
     private async ValueTask HandleIncomingCall(IncomingCall incomingCall, string? contextId)
     {
-        // create scope here
         var baseUri = _configuration["ACS:CallbackUri"];
         var callbackUri = new Uri($"{baseUri}/api/calls/{incomingCall.CorrelationId}");
         AnswerCallResult result = await _callingServerClient.AnswerCallAsync(incomingCall.IncomingCallContext, callbackUri);

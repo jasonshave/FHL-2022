@@ -1,5 +1,4 @@
-﻿@using CallCenterDashboard.Features.CallingServer
-@using System.ComponentModel.DataAnnotations
+﻿@using System.ComponentModel.DataAnnotations
 @using Azure.Communication
 @inject IDispatcher dispatcher
 @inject IDialogService DialogService
@@ -21,7 +20,7 @@
 
         var options = new DialogOptions() { CloseButton = true,  };
 
-        var dialogResult = DialogService.Show<ParticipantManagementModal>("Remove participant", parameters, options);
+        var dialogResult = DialogService.Show<ParticipantManagementModal>("Remove participant", _parameters, options);
         var result = await dialogResult.Result;
 
         if (!result.Cancelled)

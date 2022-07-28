@@ -1,13 +1,9 @@
-﻿@using CallCenterDashboard.Models
-@using Azure.Communication.CallingServer
-@using Azure.Communication
-@using CallCenterDashboard.Features.ActiveCalls
+﻿@using CallCenterDashboard.Features.ActiveCalls
 @using CallCenterDashboard.Features.CallingServer
 
 @inherits FluxorComponent
 @inject IDispatcher dispatcher
 @inject IState<ActiveCallsState> activeCallState
-
 
 <MudTable Items="@activeCallState.Value.CallData" Hover="true" Breakpoint="Breakpoint.Sm" T="CallData">
     <HeaderContent>

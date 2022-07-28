@@ -9,17 +9,18 @@
 
 @code {
     [Parameter] [Required] public CallData CallData { get; set; }
+    private DialogParameters _parameters = new()
+    {
+        { "ContentText", "Add participant" },
+        { "ButtonText", "Add" },
+        { "Color", Color.Success }
+    };
 
     async Task AddParticipant(CallData callData)
     {
-        var parameters = new DialogParameters();
-        parameters.Add("ContentText", "Add participant");
-        parameters.Add("ButtonText", "Add");
-        parameters.Add("Color", Color.Success);
+        var options = new DialogOptions { CloseButton = true };
 
-        var options = new DialogOptions() { CloseButton = true };
-
-        var dialogResult = DialogService.Show<ParticipantManagementModal>("Add participant", parameters, options);
+        var dialogResult = DialogService.Show<ParticipantManagementModal>("Add participant", _parameters, options);
         var result = await dialogResult.Result;
 
         if (!result.Cancelled)

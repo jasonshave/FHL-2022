@@ -8,17 +8,16 @@
 @code {
 
     [Parameter][Required] public CallData CallData { get; set; }
+    private DialogParameters _parameters = new ()
+    {
+        { "ContentText", "Remove participant" },
+        { "ButtonText", "Remove" },
+        { "Color", Color.Error }
+    };
 
     async Task RemoveParticipant(CallData callData)
     {
-        var parameters = new DialogParameters
-        {
-            { "ContentText", "Remove participant" },
-            { "ButtonText", "Remove" },
-            { "Color", Color.Error }
-        };
-
-        var options = new DialogOptions() { CloseButton = true,  };
+        var options = new DialogOptions { CloseButton = true };
 
         var dialogResult = DialogService.Show<ParticipantManagementModal>("Remove participant", _parameters, options);
         var result = await dialogResult.Result;

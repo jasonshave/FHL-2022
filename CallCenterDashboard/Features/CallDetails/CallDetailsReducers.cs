@@ -7,7 +7,7 @@ namespace CallCenterDashboard.Features.CallDetails
     public static class CallDetailsReducers
     {
         [ReducerMethod]
-        public static CallDetailsState SetCallDetailSet(CallDetailsState state, CallDetailSetDataAction action)
+        public static CallDetailsState SetCallDetail(CallDetailsState state, CallDetailSetDataAction action)
         {
             return state with
             {

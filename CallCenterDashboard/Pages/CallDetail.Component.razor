@@ -10,6 +10,16 @@
 
 @page "/Calls/{Id}"
 
+<style>
+    .Card {
+        padding-left: 8px;
+        padding-right: 8px;
+        padding-top: 16px;
+        padding-bottom: 24px;
+    }
+</style>
+
+
 <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
 @if (@callDetailState.Value.PreviousId != Id)
 {
@@ -17,9 +27,13 @@
 }
 else
 {
-    <CallDetail CallProperties="@callDetailState.Value.CallConnectionProperties" />
-    
-    <ParticipantTable Participants="@callDetailState.Value.Participants" />
+        <div Class="Card">
+        <CallDetail CallProperties="@callDetailState.Value.CallConnectionProperties" />
+        </div>
+
+        <div Class="Card">
+        <ParticipantTable Participants="@callDetailState.Value.Participants" />
+        </div>
 }
 
 

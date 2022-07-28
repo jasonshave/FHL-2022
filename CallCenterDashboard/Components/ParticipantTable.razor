@@ -1,11 +1,10 @@
 ﻿@using Azure.Communication.CallingServer
 @using System.ComponentModel.DataAnnotations
 
-
-<MudText Typo="Typo.h2">Participant Table</MudText>
+<MudText Typo="Typo.h4">Participant Table</MudText>
 @if(@Participants == null)
 {
-    <MudText Typo="Typo.body1">Participants information is missing</MudText>
+    <MudText Typo="Typo.subtitle2" Align="Align.Center">Participants information is missing</MudText>
 }
 else 
 {
@@ -20,19 +19,18 @@ else
             {
                 <MudTd DataLabel="Muted">
                     <MudIcon Icon="@Icons.Filled.VolumeMute"/>
-                 </MudTd>
+                </MudTd>
             }
             else 
             {
                 
                 <MudTd DataLabel="Muted">
                     <MudIcon Icon="@Icons.Filled.VolumeUp"/>
-                 </MudTd>
+                </MudTd>
             }
             </RowTemplate>
     </MudTable>
 }
-
 
 @code {
     [Parameter] [Required] public IEnumerable<CallParticipant>? Participants { get; set; }

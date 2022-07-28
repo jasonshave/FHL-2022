@@ -1,7 +1,7 @@
 ﻿@using Azure.Communication.CallingServer
 @using System.ComponentModel.DataAnnotations
 
-<MudText Typo="Typo.h2">Call Detail</MudText>
+<MudText Typo="Typo.h4">Call Detail</MudText>
 @if (@CallProperties == null)
 {
     <MudText Typo="Typo.subtitle2" Align="Align.Center">Call Detail is missing</MudText>
@@ -14,10 +14,10 @@ else
 
     <MudSimpleTable Style="overflow-x: auto;">
         <tbody>
-         @foreach (var target in CallProperties.Targets)
+        @foreach (var target in CallProperties.Targets)
             {
                 <tr>
-                     <td>@target.RawId</td>
+                    <td>@target.RawId</td>
                 </tr>
             }
         </tbody>
@@ -29,7 +29,7 @@ else
     <MudText Typo="Typo.subtitle1" Align="Align.Left">ServerCallId: @CallProperties.ServerCallId </MudText>
 }
 
-
 @code {
+    
     [Parameter] [Required] public CallConnectionProperties? CallProperties { get; set; }
 }

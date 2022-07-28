@@ -1,0 +1,34 @@
+﻿@using Azure.Communication.CallingServer
+@using System.ComponentModel.DataAnnotations
+
+
+<MudText Typo="Typo.h2">Participant Table</MudText>
+@if(@Participants == null)
+{
+    <MudText Typo="Typo.body1">Participants information is missing</MudText>
+}
+else 
+{
+    <MudTable Items="@Participants" Hover="true" Breakpoint="Breakpoint.Sm" T="CallParticipant">
+        <HeaderContent>
+            <MudTh>Identify</MudTh>
+            <MudTh>Muted</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Identify">@context.Identifier.RawId</MudTd>
+            @if (@context.IsMuted) 
+            {
+                <MudTd DataLabel="Muted">@Icons.Filled.VolumeMute</MudTd>
+            }
+            else 
+            {
+                <MudTd DataLabel="Muted">@Icons.Filled.VolumeUp</MudTd>
+            }
+            </RowTemplate>
+    </MudTable>
+}
+
+
+@code {
+    [Parameter] [Required] public IEnumerable<CallParticipant>? Participants { get; set; }
+}

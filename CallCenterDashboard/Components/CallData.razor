@@ -1,0 +1,35 @@
+﻿@using Azure.Communication.CallingServer
+@using System.ComponentModel.DataAnnotations
+
+<MudText Typo="Typo.h2">Call Detail</MudText>
+@if (@CallProperties == null)
+{
+    <MudText Typo="Typo.subtitle2" Align="Align.Center">Call Detail is missing</MudText>
+}
+else
+{
+    <MudText Typo="Typo.subtitle1" Align="Align.Left">CallConnectionId: @CallProperties.CallConnectionId</MudText>
+    <MudText Typo="Typo.subtitle1" Align="Align.Left">From: @CallProperties.CallSource.Identifier.RawId</MudText>
+    <MudText Typo="Typo.subtitle1" Align="Align.Left">Targets: </MudText>
+
+    <MudSimpleTable Style="overflow-x: auto;">
+        <tbody>
+         @foreach (var target in CallProperties.Targets)
+            {
+                <tr>
+                     <td>@target.RawId</td>
+                </tr>
+            }
+        </tbody>
+    </MudSimpleTable>
+
+    <MudText Typo="Typo.subtitle1" Align="Align.Left">CallState: @CallProperties.CallConnectionState </MudText>
+    <MudText Typo="Typo.subtitle1" Align="Align.Left">Subject: @CallProperties.Subject </MudText>
+    <MudText Typo="Typo.subtitle1" Align="Align.Left">Callback: @CallProperties.CallbackUri </MudText>
+    <MudText Typo="Typo.subtitle1" Align="Align.Left">ServerCallId: @CallProperties.ServerCallId </MudText>
+}
+
+
+@code {
+    [Parameter] [Required] public CallConnectionProperties? CallProperties { get; set; }
+}

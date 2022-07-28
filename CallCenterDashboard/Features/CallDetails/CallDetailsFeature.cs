@@ -9,5 +9,5 @@ public class CallDetailsFeature : Feature<CallDetailsState>
 {
     public override string GetName() => "CallDetails";
 
-    protected override CallDetailsState GetInitialState() => new(new ConcurrentDictionary<string, bool?>(), new ConcurrentDictionary<string, CallConnectionProperties>(), new ConcurrentDictionary<string, IEnumerable<CallParticipant>>());
+    protected override CallDetailsState GetInitialState() => new(false, null, null);
 }

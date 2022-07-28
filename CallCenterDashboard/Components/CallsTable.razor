@@ -12,6 +12,7 @@
         <MudTh>Call Duration</MudTh>
         <MudTh>Connection ID</MudTh>
         <MudTh>Correlation ID</MudTh>
+        <MudTh>Detail</MudTh>
         <MudTh>Hang up</MudTh>
         <MudTh>Terminate</MudTh>
         <MudTh>Add</MudTh>
@@ -23,6 +24,9 @@
         <MudTd DataLabel="Duration(s)">@CalculateDuration(context.CallStartTime).Seconds</MudTd>
         <MudTd DataLabel="Connection ID">@context.CallConnectionId</MudTd>
         <MudTd DataLabel="Correlation ID">@context.CorrelationId</MudTd>
+        <MudTd>
+            <DetailButton CallData="context" />
+        </MudTd>
         <MudTd>
             <HangUpButton CallData="context"/>
         </MudTd>

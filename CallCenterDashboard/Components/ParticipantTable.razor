@@ -18,11 +18,16 @@ else
             <MudTd DataLabel="Identify">@context.Identifier.RawId</MudTd>
             @if (@context.IsMuted) 
             {
-                <MudTd DataLabel="Muted">@Icons.Filled.VolumeMute</MudTd>
+                <MudTd DataLabel="Muted">
+                    <MudIconButton @onclick="() => {}" Icon="@Icons.Filled.VolumeMute"/>
+                 </MudTd>
             }
             else 
             {
-                <MudTd DataLabel="Muted">@Icons.Filled.VolumeUp</MudTd>
+                
+                <MudTd DataLabel="Muted">
+                    <MudIconButton @onclick="() => {}" Icon="@Icons.Filled.VolumeUp"/>
+                 </MudTd>
             }
             </RowTemplate>
     </MudTable>

@@ -1,0 +1,53 @@
+﻿@using CallCenterDashboard.Models
+@using Azure.Communication.CallingServer
+@using Azure.Communication
+@using CallCenterDashboard.Features.CallDetails
+@using Microsoft.AspNetCore.Components.Rendering;
+
+@inherits FluxorComponent
+@inject IDispatcher dispatcher
+@inject IState<CallDetailsState> callDetailState
+
+@page "/CallDetail/{Id}"
+
+<style>
+    .spinner-container {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        z-index: 999;
+        top: 50%;
+        left: 50%;
+    }
+</style>
+@if (@callDetailState.Value.IsInitialized)
+{
+    <CallDetail CallProperties="@callDetailState.Value.CallConnectionProperties" />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <ParticipantTable Participants="@callDetailState.Value.Participants" />
+}
+else
+{
+    <div class="spinner-container">
+        <SpinKitCircle />
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    private CallConnectionProperties? callProperties;
+    private IEnumerable<CallParticipant>? participants;
+
+    protected override void OnInitialized()
+    {
+        dispatcher.Dispatch(new InitializeCallDetailAction(Id));
+        base.OnInitialized();
+    }
+}

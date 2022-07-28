@@ -19,14 +19,14 @@ else
             @if (@context.IsMuted) 
             {
                 <MudTd DataLabel="Muted">
-                    <MudIconButton @onclick="() => {}" Icon="@Icons.Filled.VolumeMute"/>
+                    <MudIcon Icon="@Icons.Filled.VolumeMute"/>
                  </MudTd>
             }
             else 
             {
                 
                 <MudTd DataLabel="Muted">
-                    <MudIconButton @onclick="() => {}" Icon="@Icons.Filled.VolumeUp"/>
+                    <MudIcon Icon="@Icons.Filled.VolumeUp"/>
                  </MudTd>
             }
             </RowTemplate>

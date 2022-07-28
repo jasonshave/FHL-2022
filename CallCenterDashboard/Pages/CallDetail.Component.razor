@@ -10,46 +10,29 @@
 
 @page "/Calls/{Id}"
 
-<style>
-    .spinner-container {
-        display: flex;
-        flex-direction: column;
-        position: fixed;
-        z-index: 999;
-        top: 50%;
-        left: 50%;
-    }
-</style>
-
 <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-@if (@callDetailState.Value.IsInitialized)
+@if (@callDetailState.Value.PreviousId != Id)
 {
-    <CallDetail CallProperties="@callDetailState.Value.CallConnectionProperties" />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <ParticipantTable Participants="@callDetailState.Value.Participants" />
+   <MudProgressCircular Color="Color.Default" Indeterminate="true" />
 }
 else
 {
-    <div class="spinner-container">
-        <SpinKitCircle />
-    </div>
+    <CallDetail CallProperties="@callDetailState.Value.CallConnectionProperties" />
+    
+    <ParticipantTable Participants="@callDetailState.Value.Participants" />
 }
 
 
 @code {
     [Parameter]
     public string Id { get; set; }
-    private CallConnectionProperties? callProperties;
-    private IEnumerable<CallParticipant>? participants;
 
     protected override void OnInitialized()
     {
-        dispatcher.Dispatch(new InitializeCallDetailAction(Id));
+        if (callDetailState.Value.PreviousId != Id )
+        {
+            dispatcher.Dispatch(new CallDetailInitializeAction(Id));
+        }
         _items.Add(new BreadcrumbItem($"{Id}", href: null, disabled: true));
         base.OnInitialized();
     }

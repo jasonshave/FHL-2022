@@ -7,11 +7,11 @@ namespace CallCenterDashboard.Features.CallDetails
     public static class CallDetailsReducers
     {
         [ReducerMethod]
-        public static CallDetailsState HandleInitializeCallDetail(CallDetailsState state, InitializeCallDetailWithDataAction action)
+        public static CallDetailsState SetCallDetailSet(CallDetailsState state, CallDetailSetDataAction action)
         {
             return state with
             {
-                IsInitialized = true,
+                PreviousId = action.Id,
                 CallConnectionProperties = action.CallConnectionProperties,
                 Participants = action.Participants
             };

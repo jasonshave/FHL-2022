@@ -37,10 +37,6 @@ public class CallingEventSubscriber : BackgroundService
 
     private async ValueTask HandleIncomingCall(IncomingCall incomingCall, string? contextId)
     {
-
-
-        // create scope here
-
         if (incomingCall.To.RawId == _configuration["ACS:TargetId"])
         {
 

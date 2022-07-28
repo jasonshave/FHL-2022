@@ -23,24 +23,24 @@ namespace CallCenterDashboard.Features.CallDetails
             _callingServerClient = callingServerClient;
         }
 
-
         [EffectMethod]
-        public async Task OnInitialize(InitializeCallDetailAction action, IDispatcher dispatcher)
+        public async Task OnInitialize(CallDetailInitializeAction action, IDispatcher dispatcher)
         {
             var callConnection = _callingServerClient.GetCallConnection(action.Id);
             try
             {
                 CallConnectionProperties callConnectionProperties = callConnection.GetProperties();
                 var participants = (await callConnection.GetParticipantsAsync()).Value;
-                    dispatcher.Dispatch(new InitializeCallDetailWithDataAction(
+                dispatcher.Dispatch(new CallDetailSetDataAction(
+                    action.Id,
                     callConnectionProperties,
                     participants
                  ));
-
             }
             catch (Exception e)
             {
-                dispatcher.Dispatch(new InitializeCallDetailWithDataAction(
+                dispatcher.Dispatch(new CallDetailSetDataAction(
+                     action.Id,
                      null,
                      null
                   ));

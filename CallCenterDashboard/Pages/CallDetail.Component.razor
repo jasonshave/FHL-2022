@@ -1,0 +1,59 @@
+﻿@using CallCenterDashboard.Models
+@using Azure.Communication.CallingServer
+@using Azure.Communication
+@using CallCenterDashboard.Features.CallDetails
+@using Microsoft.AspNetCore.Components.Rendering;
+
+@inherits FluxorComponent
+@inject IDispatcher dispatcher
+@inject IState<CallDetailsState> callDetailState
+
+@page "/Calls/{Id}"
+
+<style>
+    .Card {
+        padding-left: 8px;
+        padding-right: 8px;
+        padding-top: 16px;
+        padding-bottom: 24px;
+    }
+</style>
+
+
+<MudBreadcrumbs Items="_items"></MudBreadcrumbs>
+@if (@callDetailState.Value.PreviousId != Id)
+{
+   <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+}
+else
+{
+        <div Class="Card">
+        <CallDetail CallProperties="@callDetailState.Value.CallConnectionProperties" />
+        </div>
+
+        <div Class="Card">
+        <ParticipantTable Participants="@callDetailState.Value.Participants" />
+        </div>
+}
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (callDetailState.Value.PreviousId != Id )
+        {
+            dispatcher.Dispatch(new CallDetailInitializeAction(Id));
+        }
+        _items.Add(new BreadcrumbItem($"{Id}", href: null, disabled: true));
+        base.OnInitialized();
+    }
+
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Home", href: "/"),
+        new BreadcrumbItem("Calls", href: null, disabled: true),
+    }; 
+}

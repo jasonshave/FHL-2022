@@ -24,6 +24,9 @@
         <MudTd DataLabel="Connection">@context.CallConnectionId</MudTd>
         <MudTd DataLabel="Correlation">@context.CorrelationId</MudTd>
         <MudTd>
+            <DetailButton CallData="context" />
+        </MudTd>
+        <MudTd>
             <HangUpButton CallData="context"/>
         </MudTd>
         <MudTd>

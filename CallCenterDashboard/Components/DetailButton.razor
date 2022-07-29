@@ -1,0 +1,15 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IDispatcher dispatcher
+
+<MudIconButton Href="@uri" Icon="@Icons.Material.Filled.Details"/>
+
+@code {
+    [Parameter] [Required] public CallData CallData { get; set; }
+    private string uri = "/";
+
+    protected override void OnParametersSet()
+    {
+        uri = $"/Calls/{CallData.CallConnectionId}";
+        base.OnParametersSet();
+    }
+}

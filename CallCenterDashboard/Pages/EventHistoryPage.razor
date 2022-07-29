@@ -1,0 +1,18 @@
+﻿@page "/eventHistory"
+
+<MudBreadcrumbs Items="_items"/>
+<MudGrid>
+    <MudItem xs="12">
+        <EventLogTable/>
+    </MudItem>
+</MudGrid>
+
+@code {
+
+    readonly List<BreadcrumbItem> _items = new()
+    {
+        new BreadcrumbItem("Home", href: "#"),
+        new BreadcrumbItem("Event History", href: null, disabled: true)
+    };
+
+}

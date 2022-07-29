@@ -9,8 +9,6 @@
         <MudTh>From</MudTh>
         <MudTh>To</MudTh>
         <MudTh>Duration(s)</MudTh>
-        <MudTh>Connection</MudTh>
-        <MudTh>Correlation</MudTh>
         <MudTh>Details</MudTh>
         <MudTh>Hang up</MudTh>
         <MudTh>Terminate</MudTh>
@@ -22,8 +20,6 @@
         <MudTd DataLabel="From">@context.From</MudTd>
         <MudTd DataLabel="To">@context.To</MudTd>
         <MudTd DataLabel="Duration(s)"><CallDuration Duration="context.CallStartTime"></CallDuration></MudTd>
-        <MudTd DataLabel="Connection">@context.CallConnectionId</MudTd>
-        <MudTd DataLabel="Correlation">@context.CorrelationId</MudTd>
         <MudTd>
             <DetailButton CallData="context" />
         </MudTd>

@@ -15,4 +15,11 @@ public class EventLogReducers
             EventLogData = currentData
         };
     }
+
+    [ReducerMethod(typeof(EventLogInitializeAction))]
+    public static EventLogState Initialize(EventLogState state) =>
+        state with
+        {
+            Initialized = true
+        };
 }

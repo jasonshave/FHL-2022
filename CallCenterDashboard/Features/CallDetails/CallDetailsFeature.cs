@@ -9,5 +9,5 @@ public class CallDetailsFeature : Feature<CallDetailsState>
 {
     public override string GetName() => "CallDetails";
 
-    protected override CallDetailsState GetInitialState() => new(null, null, null);
+    protected override CallDetailsState GetInitialState() => new(false, null, null, null);
 }

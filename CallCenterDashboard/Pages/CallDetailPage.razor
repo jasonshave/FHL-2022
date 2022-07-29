@@ -39,6 +39,10 @@ else
 
     protected override void OnInitialized()
     {
+        if (!callDetailState.Value.Initialized)
+        {
+            dispatcher.Dispatch(new CallDetailStateInializeAction());
+        }
         if (callDetailState.Value.PreviousId != Id )
         {
             dispatcher.Dispatch(new CallDetailInitializeAction(Id));

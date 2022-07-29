@@ -12,6 +12,41 @@ namespace CallCenterDashboard.Features.CallDetails
                 CallConnectionProperties = action.CallConnectionProperties,
                 Participants = action.Participants
             };
+
+        [ReducerMethod]
+        public static CallDetailsState InitializeCallDetailState(CallDetailsState state, CallDetailStateSetInitializationAction action) =>
+            state with
+            {
+                Initialized = true
+            };
+
+        [ReducerMethod]
+        public static CallDetailsState SetParticipants(CallDetailsState state, ParticipantSetDataAction action)
+        {
+            if (state.PreviousId == action.Id)
+            {
+                return state with
+                {
+                    Participants = action.Participants
+                };
+            }
+
+            return state;
+        }
+
+        [ReducerMethod]
+        public static CallDetailsState ClearCallDetail(CallDetailsState state, CallDetailClearAction action)
+        {
+            if (state.PreviousId == action.Id)
+            {
+                return state with
+                {
+                    Participants = null,
+                    CallConnectionProperties = null
+                };
+            }
+            return state;
+        }
     }
 
 }

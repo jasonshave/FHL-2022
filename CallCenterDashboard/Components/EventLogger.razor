@@ -36,7 +36,7 @@
 
     private ValueTask HandleIncomingCall(IncomingCall incomingCall, string? contextId)
     {
-        var eventLogData = new EventLogData(nameof(IncomingCall), DateTimeOffset.UtcNow, "N/A", "N/A");
+        var eventLogData = new EventLogData(nameof(IncomingCall), DateTimeOffset.UtcNow, "N/A", incomingCall.CorrelationId);
         dispatcher.Dispatch(new EventLogAddAction(eventLogData));
         return ValueTask.CompletedTask;
     }

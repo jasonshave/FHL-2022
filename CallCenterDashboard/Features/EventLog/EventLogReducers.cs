@@ -1,4 +1,5 @@
-﻿using Fluxor;
+﻿using CallCenterDashboard.Models;
+using Fluxor;
 
 namespace CallCenterDashboard.Features.EventLog;
 
@@ -21,5 +22,12 @@ public class EventLogReducers
         state with
         {
             Initialized = true
+        };
+
+    [ReducerMethod(typeof(EventLogClearAction))]
+    public static EventLogState Clear(EventLogState state) =>
+        state with
+        {
+            EventLogData = Array.Empty<EventLogData>()
         };
 }

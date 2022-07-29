@@ -1,13 +1,7 @@
-﻿using Azure;
-using Azure.Communication;
-using Azure.Communication.CallingServer;
-using CallCenterDashboard.Features.ActiveCalls;
-using CallCenterDashboard.Interfaces;
-using CallCenterDashboard.Models;
+﻿using Azure.Communication.CallingServer;
 using Fluxor;
-using JasonShave.Azure.Communication.Service.CallingServer.Sdk.Contracts.V2022_11_1_preview.Events;
 using JasonShave.Azure.Communication.Service.EventHandler.CallingServer;
-using MudBlazor;
+
 namespace CallCenterDashboard.Features.CallDetails
 {
     public class CallDetailsEffects

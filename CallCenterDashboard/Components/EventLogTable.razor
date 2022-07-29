@@ -1,6 +1,7 @@
 ﻿@using CallCenterDashboard.Features.EventLog
 @inherits FluxorComponent
 @inject IState<EventLogState> eventLogState
+@inject IJSRuntime JS
 
 <MudContainer>
     <MudTable Items="@eventLogState.Value.EventLogData" Dense="true" Filter="new Func<EventLogData,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1" Hover="true" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")">
@@ -19,7 +20,7 @@
             <MudTd DataLabel="Event">@context.EventName</MudTd>
             <MudTd DataLabel="Date">@context.EventDateTime.LocalDateTime</MudTd>
             <MudTd DataLabel="">@context.CallConnectionId</MudTd>
-            <MudTd DataLabel="Position">@context.CorrelationId</MudTd>
+            <MudTd DataLabel="Position" ><button @onclick="@(e => NewTabToCfv(@context.CorrelationId))">@context.CorrelationId</button></MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new []{50, 100}" />
@@ -47,5 +48,15 @@
         if (data.CallConnectionId.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
+    }
+
+    private async Task NewTabToCfv(string? correlationId)
+    {
+        if (correlationId != null)
+        {
+            string[] parameters = { $"https://ngc.skype.net/call/{correlationId}", "_blank" };
+            await JS.InvokeVoidAsync("open", parameters);
+        }
+
     }
 }

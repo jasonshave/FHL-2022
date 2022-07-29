@@ -39,7 +39,6 @@ public class CallingEventSubscriber : BackgroundService
     {
         if (incomingCall.To.RawId == _configuration["ACS:TargetId"])
         {
-
             var baseUri = _configuration["ACS:CallbackUri"];
             var callbackUri = new Uri($"{baseUri}/api/calls/{incomingCall.CorrelationId}");
             AnswerCallResult result = await _callingServerClient.AnswerCallAsync(incomingCall.IncomingCallContext, callbackUri);

@@ -3,16 +3,15 @@
 @inject IDispatcher dispatcher
 @inject IDialogService DialogService
 
-<MudIconButton @onclick="async () => await RemoveParticipant(CallData)" Icon="@Icons.Material.Filled.PersonAdd"/>
+<MudIconButton @onclick="async () => await RemoveParticipant(CallData)" Color="Color.Tertiary" Icon="@Icons.Material.Filled.PersonRemove"/>
 
 @code {
-
     [Parameter][Required] public CallData CallData { get; set; }
-    private DialogParameters _parameters = new ()
+    private readonly DialogParameters _parameters = new ()
     {
         { "ContentText", "Remove participant" },
         { "ButtonText", "Remove" },
-        { "Color", Color.Error }
+        { "Color", Color.Tertiary }
     };
 
     async Task RemoveParticipant(CallData callData)
@@ -24,7 +23,7 @@
 
         if (!result.Cancelled)
         {
-            var output = result.Data as ParticipantManagementModalResponse;
+            var output = result.Data as ParticipantManagementFormData;
             dispatcher.Dispatch(new CallingServerRemoveParticipantAction(callData, CommunicationIdentifier.FromRawId(output.Id)));
         }
     }

@@ -1,7 +1,7 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @inject IDispatcher dispatcher
 
-<MudIconButton Href="@uri" Icon="@Icons.Material.Filled.Details"/>
+<MudIconButton Href="@uri" Icon="@Icons.Material.Filled.Info" Color="Color.Info"/>
 
 @code {
     [Parameter] [Required] public CallData CallData { get; set; }
@@ -9,7 +9,7 @@
 
     protected override void OnParametersSet()
     {
-        uri = $"/Calls/{CallData.CallConnectionId}";
+        uri = $"/{CallData.CallConnectionId}";
         base.OnParametersSet();
     }
 }

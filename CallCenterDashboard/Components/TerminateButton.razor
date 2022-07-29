@@ -2,7 +2,7 @@
 @using System.ComponentModel.DataAnnotations
 @inject IDispatcher dispatcher
 
-<MudIconButton @onclick="() => dispatcher.Dispatch(new CallingServerTerminateAction(CallData))" Icon="@Icons.Material.Filled.PhoneDisabled"/>
+<MudIconButton @onclick="() => dispatcher.Dispatch(new CallingServerTerminateAction(CallData))" Color="Color.Error" Icon="@Icons.Material.Filled.GroupRemove"/>
 
 @code {
     [Parameter] [Required] public CallData CallData { get; set; }

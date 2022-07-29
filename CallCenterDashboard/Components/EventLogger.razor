@@ -1,0 +1,43 @@
+﻿@using JasonShave.Azure.Communication.Service.EventHandler.CallingServer
+@using CallCenterDashboard.Features.EventLog
+@using JasonShave.Azure.Communication.Service.CallingServer.Sdk.Contracts
+@using JasonShave.Azure.Communication.Service.CallingServer.Sdk.Contracts.V2022_11_1_preview.Events
+@inherits FluxorComponent
+@inject IDispatcher dispatcher;
+@inject IState<EventLogState> eventLogState
+@inject ICallingServerEventSubscriber callingServerEventSubscriber
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        if (!eventLogState.Value.Initialized)
+        {
+            callingServerEventSubscriber.OnIncomingCall += HandleIncomingCall;
+            callingServerEventSubscriber.OnCallConnected += Handle;
+            callingServerEventSubscriber.OnCallDisconnected += Handle;
+            callingServerEventSubscriber.OnAddParticipantFailed += Handle;
+            callingServerEventSubscriber.OnAddParticipantSucceeded += Handle;
+            callingServerEventSubscriber.OnCallTransferAccepted += Handle;
+            callingServerEventSubscriber.OnCallTransferFailed += Handle;
+            callingServerEventSubscriber.OnParticipantsUpdated += Handle;
+        }
+
+        base.OnInitialized();
+    }
+
+    private ValueTask Handle<TEvent>(TEvent @event, string? contextId)
+        where TEvent: BaseCallingEvent
+    {
+        var eventLogData = new EventLogData(typeof(TEvent).Name, DateTimeOffset.UtcNow, @event.CallConnectionId, @event.CorrelationId);
+        dispatcher.Dispatch(new EventLogAddAction(eventLogData));
+        return ValueTask.CompletedTask;
+    }
+
+    private ValueTask HandleIncomingCall(IncomingCall incomingCall, string? contextId)
+    {
+        var eventLogData = new EventLogData(nameof(IncomingCall), DateTimeOffset.UtcNow, "N/A", incomingCall.CorrelationId);
+        dispatcher.Dispatch(new EventLogAddAction(eventLogData));
+        return ValueTask.CompletedTask;
+    }
+}

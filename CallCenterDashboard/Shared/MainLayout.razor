@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using CallCenterDashboard.Features.EventLog
+@inherits LayoutComponentBase
 @inject IDispatcher dispatcher
 
 <MudThemeProvider @bind-IsDarkMode="darkModeEnabled"/>
@@ -26,6 +27,7 @@
             @Body
         </MudContainer>
         <Notification/>
+        <EventLogger/>
     </MudMainContent>
 </MudLayout>
 
@@ -37,6 +39,7 @@
     {
         dispatcher.Dispatch(new CallingServerInitializeAction());
         dispatcher.Dispatch(new ActiveCallsInitializeAction());
+        dispatcher.Dispatch(new EventLogInitializeAction());
         base.OnInitialized();
     }
 

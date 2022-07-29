@@ -6,14 +6,14 @@ using JasonShave.Azure.Communication.Service.EventHandler.CallingServer;
 
 namespace CallCenterDashboard.Services;
 
-public class CallingEventSubscriber : BackgroundService
+public class IncomingCallHandler : BackgroundService
 {
     private readonly IRepository<CallData> _callDataRepository;
     private readonly ICallingServerEventSubscriber _callingServerEventSubscriber;
     private readonly CallingServerClient _callingServerClient;
     private readonly IConfiguration _configuration;
 
-    public CallingEventSubscriber(
+    public IncomingCallHandler(
         IRepository<CallData> callDataRepository,
         ICallingServerEventSubscriber callingServerEventSubscriber, 
         CallingServerClient callingServerClient, 
@@ -39,12 +39,13 @@ public class CallingEventSubscriber : BackgroundService
     {
         if (incomingCall.To.RawId == _configuration["ACS:TargetId"])
         {
-
             var baseUri = _configuration["ACS:CallbackUri"];
             var callbackUri = new Uri($"{baseUri}/api/calls/{incomingCall.CorrelationId}");
-            AnswerCallResult result = await _callingServerClient.AnswerCallAsync(incomingCall.IncomingCallContext, callbackUri);
 
+            AnswerCallResult result = await _callingServerClient.AnswerCallAsync(incomingCall.IncomingCallContext, callbackUri);
             _callDataRepository.Add(result.CallProperties.CallConnectionId, new CallData(incomingCall.From.RawId, incomingCall.To.RawId, DateTimeOffset.UtcNow, result.CallProperties.CallConnectionId, incomingCall.CorrelationId));
         }
+
+        // incoming call is not for this app
     }
 }

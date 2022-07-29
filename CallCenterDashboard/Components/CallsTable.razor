@@ -2,28 +2,24 @@
 @using CallCenterDashboard.Features.CallingServer
 
 @inherits FluxorComponent
-@inject IDispatcher dispatcher
 @inject IState<ActiveCallsState> activeCallState
 
 <MudTable Items="@activeCallState.Value.CallData" Hover="true" Breakpoint="Breakpoint.Sm" T="CallData">
     <HeaderContent>
         <MudTh>From</MudTh>
         <MudTh>To</MudTh>
-        <MudTh>Call Duration</MudTh>
-        <MudTh>Connection ID</MudTh>
-        <MudTh>Correlation ID</MudTh>
-        <MudTh>Detail</MudTh>
+        <MudTh>Duration(s)</MudTh>
+        <MudTh>Info</MudTh>
         <MudTh>Hang up</MudTh>
         <MudTh>Terminate</MudTh>
+        <MudTh>Transfer</MudTh>
         <MudTh>Add</MudTh>
         <MudTh>Remove</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="From">@context.From</MudTd>
         <MudTd DataLabel="To">@context.To</MudTd>
-        <MudTd DataLabel="Duration(s)">@CalculateDuration(context.CallStartTime).Seconds</MudTd>
-        <MudTd DataLabel="Connection ID">@context.CallConnectionId</MudTd>
-        <MudTd DataLabel="Correlation ID">@context.CorrelationId</MudTd>
+        <MudTd DataLabel="Duration(s)"><CallDuration Duration="context.CallStartTime"></CallDuration></MudTd>
         <MudTd>
             <DetailButton CallData="context" />
         </MudTd>
@@ -32,6 +28,9 @@
         </MudTd>
         <MudTd>
             <TerminateButton CallData="context"/>
+        </MudTd>
+        <MudTd>
+            <TransferButton CallData="context"/>
         </MudTd>
         <MudTd>
             <AddParticipantButton CallData="context"/>
@@ -43,28 +42,5 @@
 </MudTable>
 
 @code {
-    Timer theTimer;
 
-    protected override void OnInitialized()
-    {
-        theTimer = new Timer(Tick, null, 0, 1000);
-        base.OnInitialized();
-    }
-
-    private void Tick(object _)
-    {
-        dispatcher.Dispatch(new ActiveCallsLoadDataAction());
-        InvokeAsync(StateHasChanged);
-    }
-
-    private TimeSpan CalculateDuration(DateTimeOffset startTime)
-    {
-        return DateTimeOffset.UtcNow - startTime;
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        theTimer.Dispose();
-        base.Dispose(disposing);
-    }
 }

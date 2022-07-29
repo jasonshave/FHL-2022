@@ -1,14 +1,11 @@
-﻿@using CallCenterDashboard.Models
-@using Azure.Communication.CallingServer
-@using Azure.Communication
-@using CallCenterDashboard.Features.CallDetails
-@using Microsoft.AspNetCore.Components.Rendering;
+﻿@using CallCenterDashboard.Features.CallDetails
+
 
 @inherits FluxorComponent
 @inject IDispatcher dispatcher
 @inject IState<CallDetailsState> callDetailState
 
-@page "/Calls/{Id}"
+@page "/{Id}"
 
 <style>
     .Card {
@@ -27,19 +24,18 @@
 }
 else
 {
-        <div Class="Card">
-        <CallDetail CallProperties="@callDetailState.Value.CallConnectionProperties" />
-        </div>
+    <div Class="Card">
+    <CallDetail CallProperties="@callDetailState.Value.CallConnectionProperties" />
+    </div>
 
-        <div Class="Card">
-        <ParticipantTable Participants="@callDetailState.Value.Participants" />
-        </div>
+    <div Class="Card">
+    <ParticipantTable Participants="@callDetailState.Value.Participants" />
+    </div>
 }
 
 
 @code {
-    [Parameter]
-    public string Id { get; set; }
+    [Parameter] public string Id { get; set; }
 
     protected override void OnInitialized()
     {
@@ -51,9 +47,8 @@ else
         base.OnInitialized();
     }
 
-    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+    private List<BreadcrumbItem> _items = new()
     {
-        new BreadcrumbItem("Home", href: "/"),
-        new BreadcrumbItem("Calls", href: null, disabled: true),
+        new BreadcrumbItem("Home", href: "/")
     }; 
 }

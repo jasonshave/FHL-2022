@@ -24,7 +24,7 @@ builder.Services.AddSingleton<IRepository<CallData>>(new InMemoryRepository<Call
 {
     {"effc9413-e8ef-4e51-b51b-497e63a8bbd7", new CallData("4:+14255551212", "8:acs:eba32226-8a75-47dc-afa3-cbbe8e84bc95_00000012-e271-a97e-3ef0-8b3a0d005038", DateTimeOffset.UtcNow, "a582fed2-71a4-4eb8-b59c-769a8bf86db2", "effc9413-e8ef-4e51-b51b-497e63a8bbd7")}
 }));
-builder.Services.AddHostedService<CallingEventSubscriber>();
+builder.Services.AddHostedService<IncomingCallHandler>();
 
 builder.Services.AddFluxor(x => x.ScanAssemblies(typeof(Program).Assembly));
 
@@ -60,7 +60,7 @@ app.MapPost("/api/incomingCall", (
             // Handle the subscription validation event
             if (eventData is SubscriptionValidationEventData subscriptionValidationEventData)
             {
-                var responseData = new SubscriptionValidationResponse()
+                var responseData = new SubscriptionValidationResponse
                 {
                     ValidationResponse = subscriptionValidationEventData.ValidationCode
                 };

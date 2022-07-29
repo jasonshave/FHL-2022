@@ -1,18 +1,20 @@
-﻿<MudDialog>
-    <TitleContent>
-        <MudText Typo="Typo.h6">@ContentText</MudText>
-    </TitleContent>
-    <DialogContent>
-        <MudContainer Style="width: 500px">
-            <MudText>Type an endpoint ID such as an ACS MRI, an E.164 phone number, or Teams ID</MudText>
-            <MudTextField @bind-Value="@user" Label="Identity" Variant="Variant.Text"/>
-        </MudContainer>
-    </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@ButtonText</MudButton>
-    </DialogActions>
-</MudDialog>
+﻿<EditForm Model="formData" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator/>
+    <MudDialog>
+        <TitleContent>
+            <MudText Typo="Typo.h6">@ContentText</MudText>
+        </TitleContent>
+        <DialogContent>
+            <MudContainer Style="width: 500px">
+                <MudTextField @bind-value="formData.Id" For="@(() => formData.Id)" Label="Identity" Variant="Variant.Text" HelperText="Type an ID such as an ACS MRI, an E.164 phone number, or Teams ID"/>
+            </MudContainer>
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="@Color" Variant="Variant.Filled">@ButtonText</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
 
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
@@ -20,8 +22,13 @@
     [Parameter] public string ButtonText { get; set; }
     [Parameter] public Color Color { get; set; }
 
-    private string user;
+    readonly ParticipantManagementFormData formData = new();
+    bool success;
 
-    void Submit() => MudDialog.Close(DialogResult.Ok(new ParticipantManagementModalResponse(user)));
+    void OnValidSubmit(EditContext context)
+    {
+        MudDialog.Close(DialogResult.Ok(formData));
+    }
+
     void Cancel() => MudDialog.Cancel();
 }

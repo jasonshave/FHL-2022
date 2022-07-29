@@ -1,0 +1,31 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using Azure.Communication
+
+@inject IDispatcher dispatcher
+@inject IDialogService DialogService
+
+<MudIconButton @onclick="async () => await Transfer(CallData)" Color="Color.Primary" Icon="@Icons.Material.Filled.PhoneForwarded"/>
+
+@code {
+    [Parameter] [Required] public CallData CallData { get; set; }
+    private readonly DialogParameters _parameters = new()
+    {
+        { "ContentText", "Transfer call to" },
+        { "ButtonText", "Transfer" },
+        { "Color", Color.Primary }
+    };
+
+    async Task Transfer(CallData callData)
+    {
+        var options = new DialogOptions { CloseButton = true };
+
+        var dialogResult = DialogService.Show<ParticipantManagementModal>("Transfer call", _parameters, options);
+        var result = await dialogResult.Result;
+
+        if (!result.Cancelled)
+        {
+            var output = result.Data as ParticipantManagementFormData;
+            dispatcher.Dispatch(new CallingServerTransferCallAction(callData, CommunicationIdentifier.FromRawId(output.Id)));
+        }
+    }
+}

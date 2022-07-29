@@ -101,4 +101,19 @@ public class CallingServerEffects
             dispatcher.Dispatch(new CallingServerNotifyAction(notification));
         }
     }
+
+    [EffectMethod]
+    public async Task OnTransferCall(CallingServerTransferCallAction action, IDispatcher dispatcher)
+    {
+        try
+        {
+            TransferCallToParticipantResult result = await _callingServerClient.GetCallConnection(action.CallData.CallConnectionId)
+                .TransferCallToParticipantAsync(action.UserToTransferTo);
+        }
+        catch (RequestFailedException e)
+        {
+            var notification = new NotificationData("Transfer call failed.", nameof(CallingServerTransferCallAction), Severity.Error);
+            dispatcher.Dispatch(new CallingServerNotifyAction(notification));
+        }
+    }
 }

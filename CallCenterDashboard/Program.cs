@@ -60,7 +60,7 @@ app.MapPost("/api/incomingCall", (
             // Handle the subscription validation event
             if (eventData is SubscriptionValidationEventData subscriptionValidationEventData)
             {
-                var responseData = new SubscriptionValidationResponse()
+                var responseData = new SubscriptionValidationResponse
                 {
                     ValidationResponse = subscriptionValidationEventData.ValidationCode
                 };

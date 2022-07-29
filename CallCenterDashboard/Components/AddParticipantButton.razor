@@ -5,11 +5,11 @@
 @inject IDispatcher dispatcher
 @inject IDialogService DialogService
 
-<MudIconButton @onclick="async () => await AddParticipant(CallData)" Icon="@Icons.Material.Filled.PersonAdd"/>
+<MudIconButton @onclick="async () => await AddParticipant(CallData)" Color="Color.Success" Icon="@Icons.Material.Filled.PersonAdd"/>
 
 @code {
     [Parameter] [Required] public CallData CallData { get; set; }
-    private DialogParameters _parameters = new()
+    private readonly DialogParameters _parameters = new()
     {
         { "ContentText", "Add participant" },
         { "ButtonText", "Add" },
@@ -25,7 +25,7 @@
 
         if (!result.Cancelled)
         {
-            var output = result.Data as ParticipantManagementModalResponse;
+            var output = result.Data as ParticipantManagementFormData;
             dispatcher.Dispatch(new CallingServerAddParticipantAction(callData, CommunicationIdentifier.FromRawId(output.Id)));
         }
     }

@@ -1,0 +1,34 @@
+﻿@inherits FluxorComponent
+@inject IDispatcher dispatcher
+
+<div>
+    @CalculateDuration(Duration).ToString(@"hh\:mm\:ss")
+</div>
+
+@code {
+    [Parameter] public DateTimeOffset Duration { get; set; }
+    Timer theTimer;
+
+    protected override void OnInitialized()
+    {
+        theTimer = new Timer(Tick, null, 0, 1000);
+        base.OnInitialized();
+    }
+
+    private void Tick(object _)
+    {
+        dispatcher.Dispatch(new ActiveCallsLoadDataAction());
+        InvokeAsync(StateHasChanged);
+    }
+
+    private TimeSpan CalculateDuration(DateTimeOffset startTime)
+    {
+        return DateTimeOffset.UtcNow - startTime;
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        theTimer.Dispose();
+        base.Dispose(disposing);
+    }
+}

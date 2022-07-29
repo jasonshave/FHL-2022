@@ -17,7 +17,7 @@ namespace CallCenterDashboard.Features.CallDetails
         public static CallDetailsState InitializeCallDetailState(CallDetailsState state, CallDetailStateSetInitializationAction action) =>
             state with
             {
-                initialized = true
+                Initialized = true
             };
 
         [ReducerMethod]

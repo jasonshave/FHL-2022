@@ -39,7 +39,7 @@ else
 
     protected override void OnInitialized()
     {
-        if (!callDetailState.Value.initialized)
+        if (!callDetailState.Value.Initialized)
         {
             dispatcher.Dispatch(new CallDetailStateInializeAction());
         }

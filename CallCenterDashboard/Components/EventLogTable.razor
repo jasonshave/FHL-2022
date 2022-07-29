@@ -1,0 +1,29 @@
+﻿@using CallCenterDashboard.Features.EventLog
+@inherits FluxorComponent
+@inject IState<EventLogState> eventLogState
+
+<MudContainer>
+    <MudTable Items="@eventLogState.Value.EventLogData" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"400px":"")">
+        <HeaderContent>
+            <MudTh>Event</MudTh>
+            <MudTh><MudTableSortLabel Enabled="true" InitialDirection="SortDirection.Descending" SortBy="new Func<EventLogData, object>(x => x.EventDateTime)">Date</MudTableSortLabel></MudTh>
+            <MudTh>Connection</MudTh>
+            <MudTh>Correlation</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Event">@context.EventName</MudTd>
+            <MudTd DataLabel="Date">@context.EventDateTime</MudTd>
+            <MudTd DataLabel="">@context.CallConnectionId</MudTd>
+            <MudTd DataLabel="Position">@context.CallConnectionId</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+        </PagerContent>
+    </MudTable>
+</MudContainer>
+
+
+@code {
+    bool fixed_header = true;
+    bool fixed_footer = false;
+}

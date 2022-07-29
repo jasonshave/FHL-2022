@@ -37,13 +37,13 @@ public class CallingEventSubscriber : BackgroundService
 
     private async ValueTask HandleIncomingCall(IncomingCall incomingCall, string? contextId)
     {
-        if (incomingCall.To.RawId == _configuration["ACS:TargetId"])
-        {
+        //if (incomingCall.To.RawId == _configuration["ACS:TargetId"])
+        //{
             var baseUri = _configuration["ACS:CallbackUri"];
             var callbackUri = new Uri($"{baseUri}/api/calls/{incomingCall.CorrelationId}");
             AnswerCallResult result = await _callingServerClient.AnswerCallAsync(incomingCall.IncomingCallContext, callbackUri);
 
             _callDataRepository.Add(result.CallProperties.CallConnectionId, new CallData(incomingCall.From.RawId, incomingCall.To.RawId, DateTimeOffset.UtcNow, result.CallProperties.CallConnectionId, incomingCall.CorrelationId));
-        }
+        //}
     }
 }

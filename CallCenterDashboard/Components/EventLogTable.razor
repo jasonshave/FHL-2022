@@ -20,7 +20,7 @@
             <MudTd DataLabel="Event">@context.EventName</MudTd>
             <MudTd DataLabel="Date">@context.EventDateTime.LocalDateTime</MudTd>
             <MudTd DataLabel="">@context.CallConnectionId</MudTd>
-            <MudTd DataLabel="Position" ><button @onclick="@(e => NewTabToCfv(@context.CorrelationId))">@context.CorrelationId</button></MudTd>
+            <MudTd DataLabel="CorrelationId" ><button @onclick="@(e => NewTabToCfv(@context.CorrelationId))">@context.CorrelationId</button></MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new []{50, 100}" />
@@ -57,6 +57,5 @@
             string[] parameters = { $"https://ngc.skype.net/call/{correlationId}", "_blank" };
             await JS.InvokeVoidAsync("open", parameters);
         }
-
     }
 }

@@ -20,7 +20,7 @@
             <MudTd DataLabel="Event">@context.EventName</MudTd>
             <MudTd DataLabel="Date">@context.EventDateTime.LocalDateTime</MudTd>
             <MudTd DataLabel="">@context.CallConnectionId</MudTd>
-            <MudTd DataLabel="CorrelationId" ><button @onclick="@(e => NewTabToCfv(@context.CorrelationId))">@context.CorrelationId</button></MudTd>
+            <MudTd DataLabel="CorrelationId"> <MudLink Href="@($"https://ngc.skype.net/call/{@context.CorrelationId}")" Target="_blank">@context.CorrelationId</MudLink></MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new []{50, 100}" />
@@ -48,14 +48,5 @@
         if (data.CallConnectionId.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
-    }
-
-    private async Task NewTabToCfv(string? correlationId)
-    {
-        if (correlationId != null)
-        {
-            string[] parameters = { $"https://ngc.skype.net/call/{correlationId}", "_blank" };
-            await JS.InvokeVoidAsync("open", parameters);
-        }
     }
 }

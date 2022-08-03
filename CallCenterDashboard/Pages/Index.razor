@@ -1,21 +1,10 @@
 ﻿@page "/"
 
-@inherits FluxorComponent
-@inject IState<ActiveCallsState> activeCallsState
-
 <PageTitle>Contact Center Dashboard</PageTitle>
 
 <MudContainer>
     <MudText Typo="Typo.h2">Contact Center Dashboard</MudText>
-    
-    @if (activeCallsState.Value.CallData.Any())
-    {
-        <CallsTable/>
-    }
-    else
-    {
-        <MudText>No active calls present...</MudText>
-    }
+    <CallsTable/>
 </MudContainer>
 
 @code

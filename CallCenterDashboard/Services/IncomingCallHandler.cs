@@ -28,6 +28,7 @@ public class IncomingCallHandler : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _callingServerEventSubscriber.OnIncomingCall += HandleIncomingCall;
+        _callingServerEventSubscriber.OnCallConnected += HandleCallConnected;
 
         while (!stoppingToken.IsCancellationRequested)
         {
@@ -37,15 +38,20 @@ public class IncomingCallHandler : BackgroundService
 
     private async ValueTask HandleIncomingCall(IncomingCall incomingCall, string? contextId)
     {
-        if (incomingCall.To.RawId == _configuration["ACS:TargetId"])
-        {
-            var baseUri = _configuration["ACS:CallbackUri"];
-            var callbackUri = new Uri($"{baseUri}/api/calls/{incomingCall.CorrelationId}");
+        if (incomingCall.To.RawId != _configuration["ACS:TargetId"]) return;
 
-            AnswerCallResult result = await _callingServerClient.AnswerCallAsync(incomingCall.IncomingCallContext, callbackUri);
-            _callDataRepository.Add(result.CallProperties.CallConnectionId, new CallData(incomingCall.From.RawId, incomingCall.To.RawId, DateTimeOffset.UtcNow, result.CallProperties.CallConnectionId, incomingCall.CorrelationId));
-        }
+        var baseUri = _configuration["ACS:CallbackUri"];
+        var callbackUri = new Uri($"{baseUri}/api/calls/{incomingCall.CorrelationId}");
 
-        // incoming call is not for this app
+        AnswerCallResult result = await _callingServerClient.AnswerCallAsync(incomingCall.IncomingCallContext, callbackUri);
+        _callDataRepository.Add(result.CallProperties.CallConnectionId, new CallData(incomingCall.From.RawId, incomingCall.To.RawId, DateTimeOffset.UtcNow, result.CallProperties.CallConnectionId, incomingCall.CorrelationId));
+    }
+
+    private async ValueTask HandleCallConnected(CallConnected callConnected, string? contextId)
+    {
+        await _callingServerClient.GetCallConnection(callConnected.CallConnectionId)
+            .GetCallMedia()
+            .PlayToAllAsync(
+                new FileSource(new Uri("https://acstestapp1.azurewebsites.net/audio/bot-hold-music-2.wav")));
     }
 }

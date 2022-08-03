@@ -1,6 +1,7 @@
 ﻿@using CallCenterDashboard.Features.EventLog
 @inherits FluxorComponent
 @inject IState<EventLogState> eventLogState
+@inject IJSRuntime JS
 
 <MudContainer>
     <MudTable Items="@eventLogState.Value.EventLogData" Dense="true" Filter="new Func<EventLogData,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1" Hover="true" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"400px":"")">
@@ -19,7 +20,7 @@
             <MudTd DataLabel="Event">@context.EventName</MudTd>
             <MudTd DataLabel="Date">@context.EventDateTime.LocalDateTime</MudTd>
             <MudTd DataLabel="">@context.CallConnectionId</MudTd>
-            <MudTd DataLabel="Position">@context.CorrelationId</MudTd>
+            <MudTd DataLabel="CorrelationId"> <MudLink Href="@($"https://ngc.skype.net/call/{@context.CorrelationId}")" Target="_blank">@context.CorrelationId</MudLink></MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new []{10, 50, 100}" />

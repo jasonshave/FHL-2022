@@ -5,11 +5,6 @@
 
 @code {
     [Parameter] [Required] public CallData CallData { get; set; }
-    private string uri = "/";
+    private string uri => $"/calldetails/{CallData.CallConnectionId}";
 
-    protected override void OnParametersSet()
-    {
-        uri = $"/{CallData.CallConnectionId}";
-        base.OnParametersSet();
-    }
 }

@@ -1,17 +1,19 @@
 ﻿@using CallCenterDashboard.Features.EventLog
+@using CallCenterDashboard.Features.ApplicationIdentity
 @inherits LayoutComponentBase
 @inject IDispatcher dispatcher
 
-<MudThemeProvider @bind-IsDarkMode="darkModeEnabled"/>
+<MudThemeProvider IsDarkMode="darkModeEnabled"/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 
-<PageTitle>Call Center Dashboard</PageTitle>
+<PageTitle>Azure Communication Services</PageTitle>
 
 <MudLayout>
-    <MudAppBar Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@(e => DrawerToggle())" />
-        <MudSpacer />
+    <MudAppBar>
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@(e => DrawerToggle())"/>
+        <MudSpacer/>
+        <CreateCallButton/>
         @if (darkModeEnabled)
         {
             <MudIconButton Icon="@Icons.Material.Filled.WbSunny" Color="Color.Default" OnClick="SetMode"/>
@@ -28,6 +30,7 @@
         </MudContainer>
         <Notification/>
         <EventLogger/>
+        <CallWatcher/>
     </MudMainContent>
 </MudLayout>
 
@@ -40,6 +43,9 @@
         dispatcher.Dispatch(new CallingServerInitializeAction());
         dispatcher.Dispatch(new ActiveCallsInitializeAction());
         dispatcher.Dispatch(new EventLogInitializeAction());
+        dispatcher.Dispatch(new AutoAnswerInitializeAction());
+        dispatcher.Dispatch(new ApplicationIdentityInitializeAction());
+        dispatcher.Dispatch(new PurchasedPhoneNumbersInitializeAction());
         base.OnInitialized();
     }
 

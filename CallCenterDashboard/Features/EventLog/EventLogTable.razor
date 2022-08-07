@@ -1,12 +1,10 @@
-﻿@using CallCenterDashboard.Features.EventLog
-@inherits FluxorComponent
+﻿@inherits FluxorComponent
 @inject IState<EventLogState> eventLogState
-@inject IJSRuntime JS
 
 <MudContainer>
     <MudTable Items="@eventLogState.Value.EventLogData" Dense="true" Filter="new Func<EventLogData,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1" Hover="true" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"400px":"")">
         <ToolBarContent>
-            <MudText Typo="Typo.h6">Event history</MudText>
+            <MudText Typo="Typo.h6">Logs</MudText>
             <MudSpacer/>
             <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
@@ -14,7 +12,7 @@
             <MudTh>Event</MudTh>
             <MudTh><MudTableSortLabel Enabled="true" InitialDirection="SortDirection.Descending" SortBy="new Func<EventLogData, object>(x => x.EventDateTime)">Date</MudTableSortLabel></MudTh>
             <MudTh>Connection</MudTh>
-            <MudTh>Correlation</MudTh>
+            <MudTh>Correlation (CFV)</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Event">@context.EventName</MudTd>
@@ -33,7 +31,7 @@
     bool fixed_header = true;
     bool fixed_footer = false;
     private string searchString1 = "";
-    private EventLogData selectedItem1 = null;
+    private EventLogData? selectedItem1;
 
     private bool FilterFunc1(EventLogData data) => FilterFunc(data, searchString1);
 

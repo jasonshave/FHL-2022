@@ -1,0 +1,30 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using Azure.Communication
+@inject IDispatcher dispatcher
+@inject IDialogService DialogService
+
+<MudIconButton @onclick="async () => await PlayAudio(CallData)" Color="Color.Success" Icon="@Icons.Material.Filled.MusicNote"/>
+
+@code {
+    [Parameter] [Required] public CallData CallData { get; set; }
+    private readonly DialogParameters _parameters = new()
+    {
+        { "ContentText", "Play audio" },
+        { "ButtonText", "Play" },
+        { "Color", Color.Success }
+    };
+
+    async Task PlayAudio(CallData callData)
+    {
+        var options = new DialogOptions { CloseButton = true };
+
+        var dialogResult = DialogService.Show<PlayAudioModal>("Play audio", _parameters, options);
+        var result = await dialogResult.Result;
+
+        if (!result.Cancelled)
+        {
+            var output = result.Data as PlayAudioFormData;
+            dispatcher.Dispatch(new CallingServerPlayAudioAction(callData, new Uri(output.FileLocation), output.Loop));
+        }
+    }
+}

@@ -1,0 +1,28 @@
+﻿@page "/mediaLinks"
+
+@inherits FluxorComponent
+@inject IState<PurchasedPhoneNumbersState> purchasedPhoneNumbersState
+
+<MudBreadcrumbs Items="_items"/>
+<MudContainer>
+    <MudPaper class="pa-4">
+        <MudText Typo="Typo.h4">Media Links (coming soon)</MudText>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    readonly List<BreadcrumbItem> _items = new()
+    {
+        new BreadcrumbItem("Dashboard", href: "#"),
+        new BreadcrumbItem("Media Links (coming soon)", href: null, disabled: true)
+    };
+
+    bool loading;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await base.OnInitializedAsync();
+    }
+
+}

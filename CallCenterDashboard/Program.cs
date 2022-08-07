@@ -1,17 +1,19 @@
 using Azure.Communication.CallingServer;
+using Azure.Communication.Identity;
+using Azure.Communication.PhoneNumbers;
 using Azure.Messaging;
 using Azure.Messaging.EventGrid;
 using Azure.Messaging.EventGrid.SystemEvents;
 using CallCenterDashboard.Interfaces;
 using CallCenterDashboard.Models;
 using CallCenterDashboard.Repositories;
-using CallCenterDashboard.Services;
 using Fluxor;
 using JasonShave.Azure.Communication.Service.EventHandler;
 using JasonShave.Azure.Communication.Service.EventHandler.CallingServer;
 using Microsoft.AspNetCore.Mvc;
 using MudBlazor.Services;
 using System.Text.Json;
+using CallCenterDashboard.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,9 +21,13 @@ builder.Services.AddMudServices();
 
 builder.Services.AddEventHandlerServices(option => option.PropertyNameCaseInsensitive = true)
     .AddCallingServerEventHandling();
+
 builder.Services.AddSingleton(new CallingServerClient(builder.Configuration["ACS:ConnectionString"]));
+builder.Services.AddSingleton(new CommunicationIdentityClient(builder.Configuration["ACS:ConnectionString"]));
+builder.Services.AddSingleton(new PhoneNumbersClient(builder.Configuration["ACS:ConnectionString"]));
 builder.Services.AddSingleton<IRepository<CallData>, InMemoryRepository<CallData>>();
-builder.Services.AddHostedService<IncomingCallHandler>();
+builder.Services.AddSingleton<IRepository<EventLogData>, InMemoryRepository<EventLogData>>();
+builder.Services.AddSingleton<IApplicationSettingsService, ApplicationSettingsService>();
 
 builder.Services.AddFluxor(x => x.ScanAssemblies(typeof(Program).Assembly));
 
@@ -73,6 +79,7 @@ app.MapPost("/api/incomingCall", (
 
 app.MapPost("/api/calls/{contextId}", async (
     HttpRequest request,
+    [FromServices] ILogger<Program> logger,
     [FromRoute] string contextId,
     [FromServices] IEventPublisher<Calling> publisher) =>
 {
@@ -86,6 +93,7 @@ app.MapPost("/api/calls/{contextId}", async (
 
     foreach (var @event in cloudEvents)
     {
+        logger.LogInformation($"Publishing {@event.Type}");
         publisher.Publish(@event.Data.ToString(), @event.Type, contextId);
     }
 

@@ -1,0 +1,45 @@
+﻿@using JasonShave.Azure.Communication.Service.EventHandler.CallingServer
+@using JasonShave.Azure.Communication.Service.EventHandler.Sdk.Common
+
+@inherits FluxorComponent
+@inject IState<PurchasedPhoneNumbersState> purchasedPhoneNumbersState
+@inject IDispatcher dispatcher
+@inject ICallingServerEventSubscriber callingServerEventSubscriber
+
+@code {
+    protected override void OnInitialized()
+    {
+        //SubscribeToAction<PurchasedPhoneNumbersSetLoadedAction>(_ =>
+        //{
+        //    var numbers = purchasedPhoneNumbersState.Value.PhoneNumberConfigurations.ToList();
+        //    foreach (var number in numbers)
+        //    {
+        //        UpdateEventHandling(number);
+        //    }
+        //});
+
+        SubscribeToAction<PurchasedPhoneNumbersSetAnswerModeAction>(p => UpdateEventHandling(p.PhoneNumberConfiguration));
+        
+        base.OnInitializedAsync();
+    }
+
+    void UpdateEventHandling(PhoneNumberConfiguration number)
+    {
+        callingServerEventSubscriber.OnIncomingCall += (e, c) =>
+        {
+            if (e.To.PhoneNumber.Value == number.PhoneNumber.PhoneNumber)
+            {
+                if (number.AutoAnswer)
+                {
+                    dispatcher.Dispatch(new CallingServerAnswerAction(new UnansweredCall(e, c, DateTimeOffset.UtcNow)));
+                }
+                else
+                {
+                    dispatcher.Dispatch(new UnansweredCallsAddAction(new UnansweredCall(e, c, DateTimeOffset.UtcNow)));
+                }
+            }
+
+            return ValueTask.CompletedTask;
+        };
+    }
+}

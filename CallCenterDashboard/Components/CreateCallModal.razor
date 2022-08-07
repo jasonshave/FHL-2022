@@ -1,0 +1,97 @@
+﻿@using Azure.Communication
+@using CallCenterDashboard.Tools
+
+@inherits FluxorComponent
+
+@inject IApplicationSettingsService applicationSettingsService
+
+<EditForm Model="formData" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator/>
+    <MudDialog>
+        <TitleContent>
+            <MudText Typo="Typo.h6">@ContentText</MudText>
+        </TitleContent>
+        <DialogContent>
+            <MudContainer Style="width: 500px">
+                <MudText>From: @source</MudText>
+                <MudTextField @bind-Value="target" Label="Target identity" Variant="Variant.Text" HelperText="Example: ACS MRI, Phone Number, Teams User"/>
+                <MudButton Color="Color.Primary" OnClick="AddTarget">Add Target</MudButton>
+                
+                <MudText>Targets:</MudText>
+                <MudList Clickable="true">
+                    @foreach (var item in formData.Targets)
+                    {
+                        <MudListItem OnClick="() => RemoveTarget(item)" IconColor="Color.Error" Icon="@Icons.Material.Filled.Delete" Text="@item.RawId"/>
+                        <MudDivider/>
+                    }
+                </MudList>
+                @if (alternateIdSelected)
+                {
+                    <MudTextField @bind-Value="alternateCallerId" For="@(() => alternateCallerId)" Label="Alternate PSTN caller ID" Variant="Variant.Text" HelperText="Required for outbound PSTN calling."/>
+                }
+            </MudContainer>
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="@Color" Variant="Variant.Filled">@ButtonText</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
+
+    [Parameter] public string ContentText { get; set; } = string.Empty;
+
+    [Parameter] public string ButtonText { get; set; } = string.Empty;
+    
+    [Parameter] public Color Color { get; set; }
+
+    CommunicationIdentifier? sourceId;
+    readonly CreateCallFormData formData = new();
+    string source = string.Empty;
+    string target = string.Empty;
+    string alternateCallerId = string.Empty;
+    bool alternateIdSelected;
+    
+    protected override void OnInitialized()
+    {
+        var applicationSettings = applicationSettingsService.GetSettings();
+        sourceId = applicationSettings.ApplicationIdentity;
+        source = applicationSettings.ApplicationName;
+        formData.Source = sourceId.RawId;
+        StateHasChanged();
+        base.OnInitialized();
+    }
+
+    void AddTarget()
+    {
+        if (string.IsNullOrWhiteSpace(target)) return;
+        
+        var acsTarget = target.ToCommunicationIdentifier();
+        formData.Targets.Add(acsTarget);
+        CheckTargets();
+        target = string.Empty;
+    }
+
+    void RemoveTarget(CommunicationIdentifier target)
+    {
+        formData.Targets.Remove(target);
+        CheckTargets();
+    }
+
+    void CheckTargets()
+    {
+        alternateIdSelected = formData.Targets.Any(x => x is PhoneNumberIdentifier);
+    }
+    
+    void OnValidSubmit(EditContext context)
+    {
+        formData.AlternateCallerId = !alternateIdSelected 
+            ? null 
+            : new PhoneNumberIdentifier(alternateCallerId);
+        MudDialog?.Close(DialogResult.Ok(formData));
+    }
+
+    void Cancel() => MudDialog?.Cancel();
+}

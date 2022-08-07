@@ -1,0 +1,36 @@
+﻿@page "/phoneNumbers"
+
+@inherits FluxorComponent
+@inject IState<PurchasedPhoneNumbersState> purchasedPhoneNumbersState
+
+<MudBreadcrumbs Items="_items"/>
+<MudContainer>
+    <MudPaper class="pa-4">
+        <MudText Typo="Typo.h4">Phone Numbers</MudText>
+        <MudText>If your Azure Communication Service resource has phone numbers provisioned they will appear here.</MudText>
+        
+        @if (purchasedPhoneNumbersState.Value.Loading)
+        {
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"/>
+        }
+        else
+        {
+            <MudGrid Class="pa-4">
+                @foreach(PhoneNumberConfiguration phoneNumber in purchasedPhoneNumbersState.Value.PhoneNumberConfigurations)
+                {
+                    <PhoneNumberItem PhoneNumberConfiguration="phoneNumber"/>
+                }
+            </MudGrid>
+        }
+    </MudPaper>
+</MudContainer>
+
+@code {
+    readonly List<BreadcrumbItem> _items = new()
+    {
+        new BreadcrumbItem("Dashboard", href: "#"),
+        new BreadcrumbItem("Phone Numbers", href: null, disabled: true)
+    };
+
+    bool loading;
+}

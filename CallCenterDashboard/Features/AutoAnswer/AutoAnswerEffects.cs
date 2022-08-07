@@ -29,19 +29,19 @@ public class AutoAnswerEffects
             switch (action.Enabled)
             {
                 case true:
-                {
-                    if (action.PhoneNumber.Id == e.To.RawId)
                     {
+                        if (action.PhoneNumber.Id == e.To.RawId)
+                        {
                             // IncomingCall matches the auto-answer
                             dispatcher.Dispatch(new CallingServerAnswerAction(new UnansweredCall(e, c, DateTimeOffset.UtcNow)));
+                        }
+                        break;
                     }
-                    break;
-                }
                 case false:
-                {
-                    dispatcher.Dispatch(new UnansweredCallsAddAction(new UnansweredCall(e, c, DateTimeOffset.UtcNow)));
-                    break;
-                }
+                    {
+                        dispatcher.Dispatch(new UnansweredCallsAddAction(new UnansweredCall(e, c, DateTimeOffset.UtcNow)));
+                        break;
+                    }
             }
 
             return ValueTask.CompletedTask;

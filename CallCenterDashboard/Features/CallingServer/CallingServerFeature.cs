@@ -6,5 +6,5 @@ public class CallingServerFeature : Feature<CallingServerState>
 {
     public override string GetName() => "CallingServer";
 
-    protected override CallingServerState GetInitialState() => new (true, false);
+    protected override CallingServerState GetInitialState() => new(true, false);
 }

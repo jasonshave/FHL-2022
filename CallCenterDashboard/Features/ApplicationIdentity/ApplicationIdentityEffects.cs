@@ -17,9 +17,9 @@ public class ApplicationIdentityEffects
     {
         var name = _applicationSettingsService.GetSettings().ApplicationName;
         if (name is not null) dispatch.Dispatch(new ApplicationIdentitySetNameAction(name));
-        
+
         var id = _applicationSettingsService.GetSettings().ApplicationIdentity;
-        if(id is not null) dispatch.Dispatch(new ApplicationIdentitySetIdentityAction(id));
+        if (id is not null) dispatch.Dispatch(new ApplicationIdentitySetIdentityAction(id));
 
         return Task.CompletedTask;
     }

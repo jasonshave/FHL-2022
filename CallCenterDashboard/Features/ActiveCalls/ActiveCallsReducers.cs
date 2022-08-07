@@ -17,7 +17,7 @@ public static class ActiveCallsReducers
     public static ActiveCallsState OnAddDataAction(ActiveCallsState state, ActiveCallsAddAction action)
     {
         var newList = new List<CallData>(state.CallData);
-        
+
         if (!newList.Contains(action.CallData))
         {
             newList.Add(action.CallData);

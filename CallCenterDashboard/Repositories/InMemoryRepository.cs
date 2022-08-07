@@ -1,11 +1,12 @@
-﻿using System.Collections.Concurrent;
+﻿using CallingDashboard.Interfaces;
+using System.Collections.Concurrent;
 using CallingDashboard.Interfaces;
 
 namespace CallingDashboard.Repositories
 {
     public class InMemoryRepository<T> : IRepository<T>
     {
-        private readonly ConcurrentDictionary<string, T> _data = new ();
+        private readonly ConcurrentDictionary<string, T> _data = new();
 
         public InMemoryRepository(IDictionary<string, T>? preData = null)
         {
@@ -39,6 +40,6 @@ namespace CallingDashboard.Repositories
             return false;
         }
 
-        public IEnumerable<T>List() => _data.Values;
+        public IEnumerable<T> List() => _data.Values;
     }
 }

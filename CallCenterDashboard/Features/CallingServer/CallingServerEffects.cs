@@ -79,7 +79,7 @@ public class CallingServerEffects
         try
         {
             AddParticipantsResult result = await _callingServerClient.GetCallConnection(action.CallData.CallConnectionId)
-                .AddParticipantsAsync(new []{action.UserToAdd});
+                .AddParticipantsAsync(new[] { action.UserToAdd });
         }
         catch (RequestFailedException e)
         {
@@ -94,7 +94,7 @@ public class CallingServerEffects
         try
         {
             RemoveParticipantsResult result = await _callingServerClient.GetCallConnection(action.CallData.CallConnectionId)
-                .RemoveParticipantsAsync(new []{action.UserToRemove});
+                .RemoveParticipantsAsync(new[] { action.UserToRemove });
         }
         catch (RequestFailedException e)
         {
@@ -154,7 +154,7 @@ public class CallingServerEffects
             {
                 CallerId = action.AlternateCallerId
             };
-            
+
             CreateCallResult createCallResult = await _callingServerClient.CreateCallAsync(callSource, action.Targets, new Uri(callbackUri));
             var callData = new CallData(
                 createCallResult.CallProperties.CallSource.Identifier.RawId,
@@ -166,7 +166,7 @@ public class CallingServerEffects
             _callDataRepository.Add(id, callData);
 
             dispatcher.Dispatch(new ActiveCallsAddAction(callData));
-            
+
             var notification = new NotificationData("Call started...", nameof(CallingServerCreateCallAction),
                 Severity.Success);
             dispatcher.Dispatch(new CallingServerNotifyAction(notification));

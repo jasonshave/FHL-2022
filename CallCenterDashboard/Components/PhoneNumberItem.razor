@@ -1,0 +1,19 @@
+﻿<MudItem xs="12">
+    <MudGrid>
+        <MudItem xs="6">
+            <MudText Typo="Typo.h5" Color="Color.Primary">+@PhoneNumberConfiguration.PhoneNumber.Id</MudText>
+            <MudText Typo="Typo.body1">Country: @PhoneNumberConfiguration.PhoneNumber.CountryCode</MudText>
+            <MudText Typo="Typo.body2">Assignment type: @PhoneNumberConfiguration.PhoneNumber.AssignmentType</MudText>
+            <MudText Typo="Typo.body2">Calling capabilities: @PhoneNumberConfiguration.PhoneNumber.Capabilities.Calling</MudText>
+            <MudText Typo="Typo.body2">Cost: $@PhoneNumberConfiguration.PhoneNumber.Cost.Amount/month</MudText>
+            <MudText Typo="Typo.body2">Purchased on: @PhoneNumberConfiguration.PhoneNumber.PurchaseDate.LocalDateTime</MudText>
+        </MudItem>
+        <MudItem xs="6">
+            <AutoAnswerButton PhoneNumberConfiguration="PhoneNumberConfiguration"/>
+        </MudItem>
+    </MudGrid>
+</MudItem>
+
+@code {
+    [Parameter] public PhoneNumberConfiguration PhoneNumberConfiguration { get; set; }
+}

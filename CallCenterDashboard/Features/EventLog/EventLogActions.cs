@@ -4,6 +4,8 @@ namespace CallCenterDashboard.Features.EventLog;
 
 public record EventLogInitializeAction;
 
-public record EventLogAddAction(EventLogData eventLogData);
+public record EventLogSetDataAction(IEnumerable<EventLogData> EventLogData);
+
+public record EventLogAddAction(EventLogData EventLogData);
 
 public record EventLogClearAction;

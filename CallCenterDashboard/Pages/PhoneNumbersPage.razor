@@ -1,7 +1,6 @@
 ﻿@page "/phoneNumbers"
 
 @inherits FluxorComponent
-
 @inject IState<PurchasedPhoneNumbersState> purchasedPhoneNumbersState
 
 <MudBreadcrumbs Items="_items"/>
@@ -19,21 +18,7 @@
             <MudGrid Class="pa-4">
                 @foreach(PhoneNumberConfiguration phoneNumber in purchasedPhoneNumbersState.Value.PhoneNumberConfigurations)
                 {
-                    <MudItem xs="12">
-                        <MudGrid>
-                            <MudItem xs="6">
-                                <MudText Typo="Typo.h5" Color="Color.Primary">@phoneNumber.PhoneNumber.Id</MudText>
-                                <MudText Typo="Typo.body1">Country: @phoneNumber.PhoneNumber.CountryCode</MudText>
-                                <MudText Typo="Typo.body2">Assignment type: @phoneNumber.PhoneNumber.AssignmentType</MudText>
-                                <MudText Typo="Typo.body2">Calling capabilities: @phoneNumber.PhoneNumber.Capabilities.Calling</MudText>
-                            </MudItem>
-                            <MudItem xs="6">
-                                <AutoAnswerButton PhoneNumber="phoneNumber.PhoneNumber"/>
-
-                                <MudText>Test</MudText>
-                            </MudItem>
-                        </MudGrid>
-                    </MudItem>
+                    <PhoneNumberItem PhoneNumberConfiguration="phoneNumber"/>
                 }
             </MudGrid>
         }
@@ -48,11 +33,4 @@
     };
 
     bool loading;
-
-    protected override async Task OnInitializedAsync()
-    {
-
-        await base.OnInitializedAsync();
-    }
-
 }

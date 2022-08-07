@@ -1,0 +1,34 @@
+﻿@inherits FluxorComponent
+@inject IState<UnansweredCallsState> unansweredCallState
+@inject IDispatcher dispatcher;
+
+<MudPaper Class="pa-4">
+    <MudText Typo="Typo.h4">Incoming Calls</MudText>
+    @if (unansweredCallState.Value.UnansweredCalls.Any())
+    {
+        <MudTable Items="unansweredCallState.Value.UnansweredCalls">
+            <HeaderContent>
+                <MudTh>From</MudTh>
+                <MudTh>To</MudTh>
+                <MudTh>Duration (s)</MudTh>
+                <MudTh>Answer</MudTh>
+                <MudTh>Reject</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTh>@context.IncomingCall.From.RawId</MudTh>
+                <MudTh>@context.IncomingCall.To.RawId</MudTh>
+                <MudTd DataLabel="Duration(s)"><CallDuration Duration="@DateTimeOffset.UtcNow.LocalDateTime"></CallDuration></MudTd>
+                <MudTd><AnswerCallButton Call="context"/></MudTd>
+                <MudTd><RejectCallButton Call="context"/></MudTd>
+            </RowTemplate>
+        </MudTable>
+    }
+    else
+    {
+        <MudText>No incoming calls...</MudText>
+    }
+</MudPaper>
+
+@code {
+
+}

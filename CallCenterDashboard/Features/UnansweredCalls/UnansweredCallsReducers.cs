@@ -14,7 +14,7 @@ public static class UnansweredCallsReducers
     [ReducerMethod]
     public static UnansweredCallsState OnAdd(UnansweredCallsState state, UnansweredCallsAddAction action)
     {
-        var existingCalls = state.UnansweredCalls.ToList();
+        var existingCalls = state.UnansweredCalls.ToHashSet();
         existingCalls.Add(action.UnansweredCall);
 
         return state with

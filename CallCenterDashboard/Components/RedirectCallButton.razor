@@ -1,0 +1,14 @@
+﻿@using Azure.Communication
+@inject IDispatcher dispatcher
+
+<MudIconButton OnClick="() => Handle(Call, Targets)" Color="Color.Success" Icon="@Icons.Material.Filled.Phone"/>
+
+@code {
+    [Parameter] public UnansweredCall Call { get; set; }
+    List<CommunicationIdentifier> Targets { get; set; }
+
+    void Handle(UnansweredCall call, List<CommunicationIdentifier> targets)
+    {
+        dispatcher.Dispatch(new CallingServerRedirectAction(call, targets));
+    }
+}

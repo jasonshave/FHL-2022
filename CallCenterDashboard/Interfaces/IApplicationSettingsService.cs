@@ -7,7 +7,7 @@ public interface IApplicationSettingsService
 {
     ApplicationSettings GetSettings();
 
-    IEnumerable<PhoneNumberConfiguration> ListPhoneNumbers();
+    Task<IEnumerable<PhoneNumberConfiguration>> ListPhoneNumberConfigurations();
 
     Task<CommunicationUserIdentifier> CreateApplicationIdentity(string applicationName);
 

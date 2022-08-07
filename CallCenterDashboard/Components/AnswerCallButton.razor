@@ -1,0 +1,13 @@
+﻿@inject IDispatcher dispatcher
+
+<MudIconButton OnClick="() => Handle(Call)" Color="Color.Success" Icon="@Icons.Material.Filled.Phone"/>
+
+@code {
+    [Parameter] public UnansweredCall Call { get; set; }
+
+    void Handle(UnansweredCall call)
+    {
+        dispatcher.Dispatch(new CallingServerAnswerAction(call));
+        dispatcher.Dispatch(new UnansweredCallsRemoveAction(call));
+    }
+}

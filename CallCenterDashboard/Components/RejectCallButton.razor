@@ -1,0 +1,13 @@
+﻿@inject IDispatcher dispatcher
+
+<MudIconButton OnClick="() => Handle(Call)" Color="Color.Error" Icon="@Icons.Material.Filled.PhoneDisabled"/>
+
+@code {
+    [Parameter] public UnansweredCall Call { get; set; }
+
+    void Handle(UnansweredCall call)
+    {
+        dispatcher.Dispatch(new CallingServerRejectAction(call));
+        dispatcher.Dispatch(new UnansweredCallsRemoveAction(call));
+    }
+}

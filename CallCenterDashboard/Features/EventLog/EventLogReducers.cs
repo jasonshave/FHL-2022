@@ -9,7 +9,7 @@ public class EventLogReducers
     public static EventLogState Add(EventLogState state, EventLogAddAction action)
     {
         var currentData = state.EventLogData.ToList();
-        currentData.Add(action.eventLogData);
+        currentData.Add(action.EventLogData);
 
         return state with
         {
@@ -22,6 +22,13 @@ public class EventLogReducers
         state with
         {
             Initialized = true
+        };
+
+    [ReducerMethod]
+    public static EventLogState OnSetData(EventLogState state, EventLogSetDataAction action) =>
+        state with
+        {
+            EventLogData = action.EventLogData
         };
 
     [ReducerMethod(typeof(EventLogClearAction))]

@@ -26,4 +26,19 @@ public static class PurchasedPhoneNumbersReducers
         {
             PhoneNumberConfigurations = action.PhoneNumbers
         };
+
+    [ReducerMethod]
+    public static PurchasedPhoneNumbersState OnSetAnswerMode(PurchasedPhoneNumbersState state,
+        PurchasedPhoneNumbersSetAnswerModeAction action)
+    {
+        foreach (var phoneNumberConfiguration in state.PhoneNumberConfigurations)
+        {
+            if (phoneNumberConfiguration.PhoneNumber.Id == action.PhoneNumberConfiguration.PhoneNumber.Id)
+            {
+                phoneNumberConfiguration.AutoAnswer = action.PhoneNumberConfiguration.AutoAnswer;
+            }
+        }
+
+        return state;
+    }
 }

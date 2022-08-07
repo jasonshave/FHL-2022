@@ -1,0 +1,19 @@
+﻿@using CallCenterDashboard.Interfaces
+@using Azure.Communication
+@using Azure.Communication.PhoneNumbers
+
+@inherits FluxorComponent
+@inject IDispatcher dispatcher
+
+<MudSwitch T="bool" Checked="PhoneNumberConfiguration.AutoAnswer" CheckedChanged="Changed" Color="Color.Success" Label="Auto Answer"/>
+
+@code {
+    [Parameter]
+    public PhoneNumberConfiguration PhoneNumberConfiguration { get; set; }
+    
+    void Changed(bool value)
+    {
+        PhoneNumberConfiguration.AutoAnswer = value;
+        dispatcher.Dispatch(new PurchasedPhoneNumbersSetAnswerModeAction(PhoneNumberConfiguration));
+    }
+}

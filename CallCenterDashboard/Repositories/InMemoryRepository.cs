@@ -1,7 +1,7 @@
-﻿using CallCenterDashboard.Interfaces;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
+using CallingDashboard.Interfaces;
 
-namespace CallCenterDashboard.Repositories
+namespace CallingDashboard.Repositories
 {
     public class InMemoryRepository<T> : IRepository<T>
     {

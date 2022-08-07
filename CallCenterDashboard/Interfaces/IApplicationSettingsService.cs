@@ -1,7 +1,7 @@
 ﻿using Azure.Communication;
-using CallCenterDashboard.Models;
+using CallingDashboard.Models;
 
-namespace CallCenterDashboard.Interfaces;
+namespace CallingDashboard.Interfaces;
 
 public interface IApplicationSettingsService
 {

@@ -1,4 +1,4 @@
-﻿namespace CallCenterDashboard.Models;
+﻿namespace CallingDashboard.Models;
 
 public enum ResponseEnum
 {

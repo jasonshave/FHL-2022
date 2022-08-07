@@ -4,16 +4,16 @@ using Azure.Communication.PhoneNumbers;
 using Azure.Messaging;
 using Azure.Messaging.EventGrid;
 using Azure.Messaging.EventGrid.SystemEvents;
-using CallCenterDashboard.Interfaces;
-using CallCenterDashboard.Models;
-using CallCenterDashboard.Repositories;
 using Fluxor;
 using JasonShave.Azure.Communication.Service.EventHandler;
 using JasonShave.Azure.Communication.Service.EventHandler.CallingServer;
 using Microsoft.AspNetCore.Mvc;
 using MudBlazor.Services;
 using System.Text.Json;
-using CallCenterDashboard.Services;
+using CallingDashboard.Interfaces;
+using CallingDashboard.Models;
+using CallingDashboard.Repositories;
+using CallingDashboard.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

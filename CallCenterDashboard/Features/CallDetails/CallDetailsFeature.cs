@@ -1,9 +1,6 @@
-﻿using System.Collections.Concurrent;
-using Azure.Communication.CallingServer;
-using CallCenterDashboard.Models;
-using Fluxor;
+﻿using Fluxor;
 
-namespace CallCenterDashboard.Features.CallDetails;
+namespace CallingDashboard.Features.CallDetails;
 
 public class CallDetailsFeature : Feature<CallDetailsState>
 {

@@ -1,5 +1,5 @@
-﻿using CallCenterDashboard.Models;
+﻿using CallingDashboard.Models;
 
-namespace CallCenterDashboard.Features.UnansweredCalls;
+namespace CallingDashboard.Features.UnansweredCalls;
 
 public record UnansweredCallsState(bool Initialized, IEnumerable<UnansweredCall> UnansweredCalls);

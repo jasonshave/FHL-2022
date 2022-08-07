@@ -1,7 +1,7 @@
-﻿using CallCenterDashboard.Models;
+﻿using CallingDashboard.Models;
 using Fluxor;
 
-namespace CallCenterDashboard.Features.ActiveCalls;
+namespace CallingDashboard.Features.ActiveCalls;
 
 public class ActiveCallsFeature : Feature<ActiveCallsState>
 {

@@ -1,7 +1,7 @@
-﻿using CallCenterDashboard.Models;
+﻿using CallingDashboard.Models;
 using Fluxor;
 
-namespace CallCenterDashboard.Features.EventLog;
+namespace CallingDashboard.Features.EventLog;
 
 public class EventLogFeature : Feature<EventLogState>
 {

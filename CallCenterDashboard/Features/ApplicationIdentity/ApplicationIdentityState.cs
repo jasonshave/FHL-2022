@@ -1,5 +1,5 @@
 ﻿using Azure.Communication;
 
-namespace CallCenterDashboard.Features.ApplicationIdentity;
+namespace CallingDashboard.Features.ApplicationIdentity;
 
 public record ApplicationIdentityState(bool Initialized, bool Loading, CommunicationUserIdentifier? Id, string? ApplicationName);

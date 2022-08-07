@@ -1,6 +1,6 @@
 ﻿using Azure.Communication.CallingServer;
 
-namespace CallCenterDashboard.Features.CallDetails;
+namespace CallingDashboard.Features.CallDetails;
 public record CallDetailStateInializeAction();
 public record CallDetailStateSetInitializationAction();
 public record CallDetailInitializeAction(string Id);

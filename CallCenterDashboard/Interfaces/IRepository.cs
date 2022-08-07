@@ -1,4 +1,4 @@
-﻿namespace CallCenterDashboard.Interfaces
+﻿namespace CallingDashboard.Interfaces
 {
     public interface IRepository<T>
     {

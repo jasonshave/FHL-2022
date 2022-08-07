@@ -1,6 +1,6 @@
 ﻿using Azure.Communication;
 
-namespace CallCenterDashboard.Models;
+namespace CallingDashboard.Models;
 
 public class CreateCallFormData
 {

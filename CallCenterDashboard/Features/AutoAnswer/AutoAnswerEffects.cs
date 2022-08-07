@@ -1,11 +1,11 @@
-﻿using CallCenterDashboard.Features.CallingServer;
-using CallCenterDashboard.Features.UnansweredCalls;
-using CallCenterDashboard.Interfaces;
-using CallCenterDashboard.Models;
+﻿using CallingDashboard.Features.CallingServer;
+using CallingDashboard.Features.UnansweredCalls;
+using CallingDashboard.Interfaces;
+using CallingDashboard.Models;
 using Fluxor;
 using JasonShave.Azure.Communication.Service.EventHandler.CallingServer;
 
-namespace CallCenterDashboard.Features.AutoAnswer;
+namespace CallingDashboard.Features.AutoAnswer;
 
 public class AutoAnswerEffects
 {

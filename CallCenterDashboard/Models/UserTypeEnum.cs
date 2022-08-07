@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace CallCenterDashboard.Models;
+namespace CallingDashboard.Models;
 
 public enum UserTypeEnum
 {

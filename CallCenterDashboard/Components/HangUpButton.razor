@@ -1,4 +1,6 @@
 ﻿@using System.ComponentModel.DataAnnotations
+@using CallingDashboard.Features.CallingServer
+@using CallingDashboard.Models
 @inject IDispatcher dispatcher
 
 <MudIconButton @onclick="() => dispatcher.Dispatch(new CallingServerHangUpAction(CallData))" Color="Color.Error" Icon="@Icons.Material.Filled.PhoneDisabled"/>

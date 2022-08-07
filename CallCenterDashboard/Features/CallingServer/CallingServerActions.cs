@@ -1,7 +1,7 @@
 ﻿using Azure.Communication;
-using CallCenterDashboard.Models;
+using CallingDashboard.Models;
 
-namespace CallCenterDashboard.Features.CallingServer;
+namespace CallingDashboard.Features.CallingServer;
 
 public record CallingServerInitializeAction;
 public record CallingServerAnswerAction(UnansweredCall UnansweredCall);

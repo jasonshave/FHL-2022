@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Azure.Communication;
 
-namespace CallCenterDashboard.Models;
+namespace CallingDashboard.Models;
 
 public class ApplicationSettings
 {

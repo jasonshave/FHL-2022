@@ -1,6 +1,6 @@
 ﻿using Azure.Communication.PhoneNumbers;
 
-namespace CallCenterDashboard.Models;
+namespace CallingDashboard.Models;
 
 public class PhoneNumberConfiguration
 {

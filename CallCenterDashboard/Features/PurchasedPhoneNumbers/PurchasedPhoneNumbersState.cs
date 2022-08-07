@@ -1,5 +1,5 @@
-﻿using CallCenterDashboard.Models;
+﻿using CallingDashboard.Models;
 
-namespace CallCenterDashboard.Features.PurchasedPhoneNumbers;
+namespace CallingDashboard.Features.PurchasedPhoneNumbers;
 
 public record PurchasedPhoneNumbersState(bool Initialized, bool Loading, IEnumerable<PhoneNumberConfiguration> PhoneNumberConfigurations);

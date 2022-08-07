@@ -1,6 +1,6 @@
 ﻿using Fluxor;
 
-namespace CallCenterDashboard.Features.ApplicationIdentity;
+namespace CallingDashboard.Features.ApplicationIdentity;
 
 public class ApplicationIdentityFeature : Feature<ApplicationIdentityState>
 {

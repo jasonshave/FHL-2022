@@ -1,7 +1,7 @@
-﻿using CallCenterDashboard.Interfaces;
+﻿using CallingDashboard.Interfaces;
 using Fluxor;
 
-namespace CallCenterDashboard.Features.ApplicationIdentity;
+namespace CallingDashboard.Features.ApplicationIdentity;
 
 public class ApplicationIdentityEffects
 {

@@ -1,6 +1,6 @@
-﻿using CallCenterDashboard.Models;
+﻿using CallingDashboard.Models;
 
-namespace CallCenterDashboard.Features.ActiveCalls;
+namespace CallingDashboard.Features.ActiveCalls;
 
 public record ActiveCallsInitializeAction;
 

@@ -7,7 +7,7 @@ public record CallDetailInitializeAction(string Id);
 
 public record CallDetailSetDataAction(
     string Id,
-    CallConnectionProperties CallConnectionProperties, 
+    CallConnectionProperties CallConnectionProperties,
     IEnumerable<CallParticipant> Participants);
 
 public record ParticipantUpdateAction(string Id);

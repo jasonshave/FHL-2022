@@ -2,6 +2,8 @@
 
 This project uses the following Azure Communication Services (ACS) SDK's to create a simple dashboard for managing Call Automation scenarios, reading purchased phone numbers, and handling ACS identities.
 
+![Dashboard Image](dashboard.png)
+
 ## Prerequisites
 
 - Provision an Communication Service resource in Azure.

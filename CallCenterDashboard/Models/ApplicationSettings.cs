@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Azure.Communication;
+﻿using Azure.Communication;
+using System.ComponentModel.DataAnnotations;
 
 namespace CallingDashboard.Models;
 

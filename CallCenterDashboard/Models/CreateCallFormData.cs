@@ -8,5 +8,5 @@ public class CreateCallFormData
 
     public PhoneNumberIdentifier? AlternateCallerId { get; set; }
 
-    public HashSet<CommunicationIdentifier> Targets { get; } = new ();
+    public HashSet<CommunicationIdentifier> Targets { get; } = new();
 }

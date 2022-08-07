@@ -7,7 +7,6 @@
 <MudIconButton @onclick="async () => await CreateCall()" Color="Color.Inherit" Icon="@Icons.Material.Filled.AddIcCall"/>
 
 @code {
-    [Parameter] [Required] public CallData CallData { get; set; }
     private readonly DialogParameters _parameters = new()
     {
         { "ContentText", "New call" },

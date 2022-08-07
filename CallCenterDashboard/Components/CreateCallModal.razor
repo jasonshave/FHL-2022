@@ -2,8 +2,9 @@
 @using CallCenterDashboard.Tools
 
 @inherits FluxorComponent
-
-@inject IApplicationSettingsService applicationSettingsService
+@inject IState<ApplicationIdentityState> applicationIdentityState
+@inject IState<PurchasedPhoneNumbersState> purchasedPhoneNumbersState
+@inject NavigationManager NavigationManager
 
 <EditForm Model="formData" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator/>
@@ -13,7 +14,7 @@
         </TitleContent>
         <DialogContent>
             <MudContainer Style="width: 500px">
-                <MudText>From: @source</MudText>
+                <MudText>From: @applicationName</MudText>
                 <MudTextField @bind-Value="target" Label="Target identity" Variant="Variant.Text" HelperText="Example: ACS MRI, Phone Number, Teams User"/>
                 <MudButton Color="Color.Primary" OnClick="AddTarget">Add Target</MudButton>
                 
@@ -21,13 +22,18 @@
                 <MudList Clickable="true">
                     @foreach (var item in formData.Targets)
                     {
-                        <MudListItem OnClick="() => RemoveTarget(item)" IconColor="Color.Error" Icon="@Icons.Material.Filled.Delete" Text="@item.RawId"/>
+                        <MudListItem OnClick="() => RemoveTarget(item)" IconColor="Color.Success" Icon="@Icons.Material.Filled.Check" Text="@item.RawId"/>
                         <MudDivider/>
                     }
                 </MudList>
                 @if (alternateIdSelected)
                 {
-                    <MudTextField @bind-Value="alternateCallerId" For="@(() => alternateCallerId)" Label="Alternate PSTN caller ID" Variant="Variant.Text" HelperText="Required for outbound PSTN calling."/>
+                    <MudSelect T="string" @bind-Value="alternateCallerId" Label="Alternate caller ID number" SelectedValuesChanged="() => ReceiveAlternateCallerIdValue(target)">
+                        @foreach (var configuration in purchasedPhoneNumbersState.Value.PhoneNumberConfigurations)
+                        {
+                            <MudSelectItem Value="configuration.PhoneNumber.PhoneNumber">@configuration.PhoneNumber.PhoneNumber</MudSelectItem>
+                        }
+                    </MudSelect>
                 }
             </MudContainer>
         </DialogContent>
@@ -41,6 +47,8 @@
 @code {
     [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
 
+    [Inject] private IDialogService DialogService { get; set; }
+
     [Parameter] public string ContentText { get; set; } = string.Empty;
 
     [Parameter] public string ButtonText { get; set; } = string.Empty;
@@ -49,19 +57,35 @@
 
     CommunicationIdentifier? sourceId;
     readonly CreateCallFormData formData = new();
-    string source = string.Empty;
+    string applicationName => applicationIdentityState.Value.ApplicationName;
     string target = string.Empty;
     string alternateCallerId = string.Empty;
     bool alternateIdSelected;
     
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        var applicationSettings = applicationSettingsService.GetSettings();
-        sourceId = applicationSettings.ApplicationIdentity;
-        source = applicationSettings.ApplicationName;
-        formData.Source = sourceId.RawId;
+        sourceId = applicationIdentityState.Value.Id;
+
+        if (applicationIdentityState.Value.ApplicationName is null)
+        {
+            var result = await DialogService.ShowMessageBox("Application identity not set.", "You must set the application's identity to make outbound calls.", yesText: "OK", null, null, new DialogOptions()
+            {
+                CloseButton = true
+            });
+
+            NavigationManager.NavigateTo("identity");
+            return;
+        }
+
+        formData.Source = applicationIdentityState.Value.Id.RawId;
         StateHasChanged();
-        base.OnInitialized();
+        
+        await base.OnInitializedAsync();
+    }
+
+    void ReceiveAlternateCallerIdValue(string value)
+    {
+
     }
 
     void AddTarget()

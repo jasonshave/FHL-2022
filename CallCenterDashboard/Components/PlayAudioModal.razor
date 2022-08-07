@@ -1,0 +1,39 @@
+﻿<EditForm Model="formData" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator/>
+    <MudDialog>
+        <TitleContent>
+            <MudText Typo="Typo.h6">@ContentText</MudText>
+        </TitleContent>
+        <DialogContent>
+            <MudContainer Style="width: 500px">
+                <MudCheckBox T="bool" @bind-Value="formData.Loop">Loop audio</MudCheckBox>
+                <MudTextField @bind-Value="formData.FileLocation" For="@(() => formData.FileLocation)" Label="File Location" Variant="Variant.Text" HelperText="Choose a file URI as the audio source.">
+                    https://acstestapp1.azurewebsites.net/audio/bot-hold-music-2.wav
+                </MudTextField>
+            </MudContainer>
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="@Color" Variant="Variant.Filled">@ButtonText</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
+
+    [Parameter] public string ContentText { get; set; } = string.Empty;
+
+    [Parameter] public string ButtonText { get; set; } = string.Empty;
+    
+    [Parameter] public Color Color { get; set; }
+
+    readonly PlayAudioFormData formData = new();
+    
+    void OnValidSubmit(EditContext context)
+    {
+        MudDialog?.Close(DialogResult.Ok(formData));
+    }
+
+    void Cancel() => MudDialog?.Cancel();
+}

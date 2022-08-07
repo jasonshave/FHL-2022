@@ -1,10 +1,10 @@
-﻿using CallCenterDashboard.Interfaces;
-using CallCenterDashboard.Models;
+﻿using CallingDashboard.Interfaces;
+using CallingDashboard.Models;
 using Fluxor;
 using JasonShave.Azure.Communication.Service.EventHandler.CallingServer;
 using MudBlazor;
 
-namespace CallCenterDashboard.Features.ActiveCalls;
+namespace CallingDashboard.Features.ActiveCalls;
 
 public class ActiveCallsEffects
 {

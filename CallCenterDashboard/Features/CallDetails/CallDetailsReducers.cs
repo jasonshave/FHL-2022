@@ -1,6 +1,6 @@
 ﻿using Fluxor;
 
-namespace CallCenterDashboard.Features.CallDetails
+namespace CallingDashboard.Features.CallDetails
 {
     public static class CallDetailsReducers
     {

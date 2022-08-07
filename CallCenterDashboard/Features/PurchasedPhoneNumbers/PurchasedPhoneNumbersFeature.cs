@@ -1,7 +1,7 @@
-﻿using CallCenterDashboard.Models;
+﻿using CallingDashboard.Models;
 using Fluxor;
 
-namespace CallCenterDashboard.Features.PurchasedPhoneNumbers;
+namespace CallingDashboard.Features.PurchasedPhoneNumbers;
 
 public class PurchasedPhoneNumbersFeature : Feature<PurchasedPhoneNumbersState>
 {

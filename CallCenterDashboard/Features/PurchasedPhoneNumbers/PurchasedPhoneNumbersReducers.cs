@@ -1,6 +1,6 @@
 ﻿using Fluxor;
 
-namespace CallCenterDashboard.Features.PurchasedPhoneNumbers;
+namespace CallingDashboard.Features.PurchasedPhoneNumbers;
 
 public static class PurchasedPhoneNumbersReducers
 {

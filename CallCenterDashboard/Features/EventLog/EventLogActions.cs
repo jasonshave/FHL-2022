@@ -1,6 +1,6 @@
-﻿using CallCenterDashboard.Models;
+﻿using CallingDashboard.Models;
 
-namespace CallCenterDashboard.Features.EventLog;
+namespace CallingDashboard.Features.EventLog;
 
 public record EventLogInitializeAction;
 

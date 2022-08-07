@@ -1,6 +1,6 @@
 ﻿using Azure.Communication;
 
-namespace CallCenterDashboard.Tools;
+namespace CallingDashboard.Tools;
 
 public static class CommunicationIdentifierExtensions
 {

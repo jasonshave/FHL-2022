@@ -1,8 +1,8 @@
-﻿using CallCenterDashboard.Interfaces;
-using CallCenterDashboard.Models;
+﻿using CallingDashboard.Interfaces;
+using CallingDashboard.Models;
 using Fluxor;
 
-namespace CallCenterDashboard.Features.EventLog;
+namespace CallingDashboard.Features.EventLog;
 
 public class EventLogEffects
 {

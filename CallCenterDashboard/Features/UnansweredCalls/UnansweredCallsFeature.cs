@@ -1,7 +1,7 @@
-﻿using CallCenterDashboard.Models;
+﻿using CallingDashboard.Models;
 using Fluxor;
 
-namespace CallCenterDashboard.Features.UnansweredCalls;
+namespace CallingDashboard.Features.UnansweredCalls;
 
 public class UnansweredCallsFeature : Feature<UnansweredCallsState>
 {

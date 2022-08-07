@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CallCenterDashboard.Models;
+namespace CallingDashboard.Models;
 
 public class PlayAudioFormData
 {

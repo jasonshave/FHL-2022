@@ -1,7 +1,7 @@
-﻿using CallCenterDashboard.Interfaces;
+﻿using CallingDashboard.Interfaces;
 using Fluxor;
 
-namespace CallCenterDashboard.Features.PurchasedPhoneNumbers;
+namespace CallingDashboard.Features.PurchasedPhoneNumbers;
 
 public class PurchasedPhoneNumbersEffects
 {

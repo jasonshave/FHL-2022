@@ -2,7 +2,7 @@
 using Fluxor;
 using JasonShave.Azure.Communication.Service.EventHandler.CallingServer;
 
-namespace CallCenterDashboard.Features.CallDetails
+namespace CallingDashboard.Features.CallDetails
 {
     public class CallDetailsEffects
     {

@@ -1,10 +1,10 @@
 ﻿using Azure.Communication;
 using Azure.Communication.Identity;
 using Azure.Communication.PhoneNumbers;
-using CallCenterDashboard.Interfaces;
-using CallCenterDashboard.Models;
+using CallingDashboard.Interfaces;
+using CallingDashboard.Models;
 
-namespace CallCenterDashboard.Services;
+namespace CallingDashboard.Services;
 
 public class ApplicationSettingsService : IApplicationSettingsService
 {

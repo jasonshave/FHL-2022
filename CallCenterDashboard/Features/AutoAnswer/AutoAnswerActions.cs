@@ -1,6 +1,6 @@
 ﻿using Azure.Communication.PhoneNumbers;
 
-namespace CallCenterDashboard.Features.AutoAnswer;
+namespace CallingDashboard.Features.AutoAnswer;
 
 public record AutoAnswerInitializeAction;
 

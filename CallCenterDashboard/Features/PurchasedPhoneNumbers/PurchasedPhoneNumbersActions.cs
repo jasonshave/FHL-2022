@@ -1,6 +1,6 @@
-﻿using CallCenterDashboard.Models;
+﻿using CallingDashboard.Models;
 
-namespace CallCenterDashboard.Features.PurchasedPhoneNumbers;
+namespace CallingDashboard.Features.PurchasedPhoneNumbers;
 
 public record PurchasedPhoneNumbersInitializeAction;
 

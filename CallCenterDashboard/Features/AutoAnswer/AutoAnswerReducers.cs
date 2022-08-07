@@ -1,6 +1,6 @@
 ﻿using Fluxor;
 
-namespace CallCenterDashboard.Features.AutoAnswer;
+namespace CallingDashboard.Features.AutoAnswer;
 
 public static class AutoAnswerReducers
 {

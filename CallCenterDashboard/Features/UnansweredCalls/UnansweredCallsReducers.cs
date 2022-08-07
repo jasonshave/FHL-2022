@@ -1,6 +1,6 @@
 ﻿using Fluxor;
 
-namespace CallCenterDashboard.Features.UnansweredCalls;
+namespace CallingDashboard.Features.UnansweredCalls;
 
 public static class UnansweredCallsReducers
 {

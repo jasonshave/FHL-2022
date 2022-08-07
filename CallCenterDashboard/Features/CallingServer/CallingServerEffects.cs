@@ -1,15 +1,14 @@
 ﻿using Azure;
 using Azure.Communication.CallingServer;
-using CallCenterDashboard.Features.ActiveCalls;
-using CallCenterDashboard.Features.ApplicationIdentity;
-using CallCenterDashboard.Features.UnansweredCalls;
-using CallCenterDashboard.Interfaces;
-using CallCenterDashboard.Models;
+using CallingDashboard.Features.ActiveCalls;
+using CallingDashboard.Features.UnansweredCalls;
+using CallingDashboard.Interfaces;
+using CallingDashboard.Models;
 using Fluxor;
 using JasonShave.Azure.Communication.Service.EventHandler.CallingServer;
 using MudBlazor;
 
-namespace CallCenterDashboard.Features.CallingServer;
+namespace CallingDashboard.Features.CallingServer;
 
 public class CallingServerEffects
 {

@@ -1,6 +1,6 @@
 ﻿using Fluxor;
 
-namespace CallCenterDashboard.Features.CallingServer;
+namespace CallingDashboard.Features.CallingServer;
 
 public class CallingServerFeature : Feature<CallingServerState>
 {

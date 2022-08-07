@@ -1,6 +1,6 @@
 ﻿using Azure.Communication;
 
-namespace CallCenterDashboard.Features.ApplicationIdentity;
+namespace CallingDashboard.Features.ApplicationIdentity;
 
 public record ApplicationIdentityInitializeAction;
 

@@ -12,6 +12,6 @@ public record ActiveCallsSetInitializedAction;
 
 public record ActiveCallsAddAction(CallData CallData);
 
-public record ActiveCallsRemoveAction(string CallConnectionId);
+public record ActiveCallsRemoveAction(string Id);
 
 public record ActiveCallsNotifyAction(NotificationData NotificationData);

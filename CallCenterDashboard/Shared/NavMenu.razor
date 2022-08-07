@@ -1,11 +1,16 @@
-﻿<MudDrawer @bind-Open="DrawerOpen" Elevation="2">
+﻿@inject IApplicationSettingsService applicationSettingsService
+
+<MudDrawer @bind-Open="DrawerOpen" Elevation="2">
     <MudDrawerHeader>
-        <MudText Typo="Typo.h5" Class="mt-1">FHL 2022</MudText>
+        <MudImage Src="/images/acs_logo.jpg" Width="50" Height="50" Class="rounded-lg"/>
+        <MudText Typo="Typo.caption" Class="ma-1">Azure Communication Services</MudText>
     </MudDrawerHeader>
     <MudPaper Width="240px" Elevation="0" Class="py-1">
         <MudNavMenu Margin="Margin.Dense" Color="Color.Primary">
-            <MudNavLink Href="" IconColor="Color.Tertiary" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.House">Home</MudNavLink>
-            <MudNavLink Href="eventHistory" IconColor="Color.Info" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.Notes">Event History</MudNavLink>
+            <MudNavLink Href="" IconColor="Color.Primary" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.Dashboard">Dashboard</MudNavLink>
+            <MudNavLink Href="identity" IconColor="Color.Tertiary" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.Computer">Identity</MudNavLink>
+            <MudNavLink Href="phoneNumbers" IconColor="Color.Warning" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.Numbers">Phone Numbers</MudNavLink>
+            <MudNavLink Href="eventHistory" IconColor="Color.Secondary" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.Notes">Event History</MudNavLink>
         </MudNavMenu>
     </MudPaper>
 </MudDrawer>

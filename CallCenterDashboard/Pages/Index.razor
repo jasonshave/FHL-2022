@@ -1,13 +1,14 @@
 ﻿@page "/"
 
-<PageTitle>Contact Center Dashboard</PageTitle>
+@inherits FluxorComponent
+
+<PageTitle>ACS - Dashboard</PageTitle>
 
 <MudContainer>
-    <MudText Typo="Typo.h2">Contact Center Dashboard</MudText>
-    <CallsTable/>
+    <UnansweredCallsCards/>
+    <ActiveCalls/>
 </MudContainer>
 
 @code
 {
-    
 }

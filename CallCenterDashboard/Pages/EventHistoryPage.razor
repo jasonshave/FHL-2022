@@ -1,17 +1,16 @@
 ﻿@page "/eventHistory"
 
 <MudBreadcrumbs Items="_items"/>
-<MudGrid>
-    <MudItem xs="12">
-        <EventLogTable/>
-    </MudItem>
-</MudGrid>
+<MudContainer>
+    <MudText Typo="Typo.h4">Event History</MudText>
+    <EventLogTable/>
+</MudContainer>
+
 
 @code {
-
     readonly List<BreadcrumbItem> _items = new()
     {
-        new BreadcrumbItem("Home", href: "#"),
+        new BreadcrumbItem("Dashboard", href: "#"),
         new BreadcrumbItem("Event History", href: null, disabled: true)
     };
 

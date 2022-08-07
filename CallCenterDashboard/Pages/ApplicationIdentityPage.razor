@@ -1,0 +1,72 @@
+﻿@page "/identity"
+
+@inherits FluxorComponent
+@inject IDispatcher dispatcher
+@inject IState<ApplicationIdentityState> applicationIdentityState
+
+<PageTitle>ACS - Application Identity</PageTitle>
+<MudBreadcrumbs Items="_items"/>
+<MudContainer>
+    <MudPaper class="pa-4">
+        <EditForm Model="model" OnValidSubmit="Submit">
+            <DataAnnotationsValidator />
+            <MudText Typo="Typo.h4">Application Identity</MudText>
+            <MudText Typo="Typo.body1">
+                The Communication Services identity is used to perform certain actions within this application such as placing calls using the Call Automation SDK.
+                Once set, both the application name and identity are preserved until the web application is restarted.
+            </MudText>
+            <MudTextField Disabled="isRegistered" Label="Name" HelperText="Enter a name for this application." @bind-Value="model.Name" For="@(() => model.Name)" Adornment="@adornment" AdornmentIcon="@Icons.Material.Filled.CheckCircle" AdornmentColor="Color.Success"/>
+            <MudTextField Disabled="isRegistered" HelperText="Click to request an identity." @bind-Value="rawId" Variant="Variant.Text" Adornment="@adornment" AdornmentIcon="@Icons.Material.Filled.CheckCircle" AdornmentColor="Color.Success"/>
+            <MudDivider/>
+            <MudButton Disabled="isRegistered" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
+                Register
+            </MudButton>
+        </EditForm>
+
+    </MudPaper>
+</MudContainer>
+
+@code {
+    readonly List<BreadcrumbItem> _items = new()
+    {
+        new BreadcrumbItem("Dashboard", href: "#"),
+        new BreadcrumbItem("Application Identity", href: null, disabled: true)
+    };
+
+    readonly ApplicationIdentityFormData model = new();
+    bool isRegistered;
+    string? rawId;
+    string? applicationName;
+    Adornment adornment = Adornment.None;
+
+    protected override void OnInitialized()
+    {
+        rawId = applicationIdentityState.Value.Id?.RawId;
+        model.Name = applicationIdentityState.Value.ApplicationName;
+
+        SubscribeToAction<ApplicationIdentitySetIdentityAction>(i =>
+        {
+            rawId = i.identity.RawId;
+            isRegistered = true;
+            adornment = Adornment.End;
+        });
+        SubscribeToAction<ApplicationIdentitySetNameAction>(i =>
+        {
+            model.Name = i.ApplicationName;
+        });
+
+        if (applicationIdentityState.Value.ApplicationName is not null)
+        {
+            adornment = Adornment.End;
+            isRegistered = true;
+        }
+
+        StateHasChanged();
+        base.OnInitialized();
+    }
+
+    void Submit(EditContext context)
+    {
+        dispatcher.Dispatch(new ApplicationIdentitySetNameAction(model.Name));
+    }
+}

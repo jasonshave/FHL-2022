@@ -1,0 +1,62 @@
+﻿@using CallCenterDashboard.Features.ActiveCalls
+@using CallCenterDashboard.Features.CallingServer
+
+@inherits FluxorComponent
+@inject IState<ActiveCallsState> activeCallState
+
+<MudPaper Class="pa-4">
+    <MudText Typo="Typo.h4">Active Calls</MudText>
+    @if (activeCallState.Value.CallData.Any())
+    {
+        <MudTable Items="@activeCallState.Value.CallData" Hover="true" Breakpoint="Breakpoint.Sm" T="CallData">
+            <HeaderContent>
+                <MudTh>From</MudTh>
+                <MudTh>To</MudTh>
+                <MudTh>Duration(s)</MudTh>
+                <MudTh>Info</MudTh>
+                <MudTh>Play</MudTh>
+                <MudTh>Hang up</MudTh>
+                <MudTh>Terminate</MudTh>
+                <MudTh>Transfer</MudTh>
+                <MudTh>Add</MudTh>
+                <MudTh>Remove</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="From">@context.From</MudTd>
+                <MudTd DataLabel="To">@context.To</MudTd>
+                <MudTd DataLabel="Duration(s)"><CallDuration Duration="context.CallStartTime"></CallDuration></MudTd>
+                <MudTd>
+                    <DetailButton CallData="context" />
+                </MudTd>
+                <MudTd>
+                    <PlayAudioButton CallData="context"/>
+                </MudTd>
+                <MudTd>
+                    <HangUpButton CallData="context"/>
+                </MudTd>
+                <MudTd>
+                    <TerminateButton CallData="context"/>
+                </MudTd>
+                <MudTd>
+                    <TransferButton CallData="context"/>
+                </MudTd>
+                <MudTd>
+                    <AddParticipantButton CallData="context"/>
+                </MudTd>
+                <MudTd>
+                    <RemoveParticipantButton CallData="context"/>
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    }
+    else
+    {
+        <MudText>No active calls...</MudText>
+    }
+
+</MudPaper>
+
+
+@code {
+
+}

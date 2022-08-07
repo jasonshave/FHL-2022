@@ -2,6 +2,7 @@
 @using CallCenterDashboard.Features.EventLog
 @using JasonShave.Azure.Communication.Service.CallingServer.Sdk.Contracts
 @using JasonShave.Azure.Communication.Service.CallingServer.Sdk.Contracts.V2022_11_1_preview.Events
+
 @inherits FluxorComponent
 @inject IDispatcher dispatcher;
 @inject IState<EventLogState> eventLogState
@@ -16,8 +17,6 @@
             callingServerEventSubscriber.OnIncomingCall += HandleIncomingCall;
             callingServerEventSubscriber.OnCallConnected += Handle;
             callingServerEventSubscriber.OnCallDisconnected += Handle;
-            callingServerEventSubscriber.OnAddParticipantFailed += Handle;
-            callingServerEventSubscriber.OnAddParticipantSucceeded += Handle;
             callingServerEventSubscriber.OnCallTransferAccepted += Handle;
             callingServerEventSubscriber.OnCallTransferFailed += Handle;
             callingServerEventSubscriber.OnParticipantsUpdated += Handle;

@@ -1,0 +1,31 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using Azure.Communication
+
+@inject IDispatcher dispatcher
+@inject IDialogService DialogService
+
+<MudIconButton @onclick="async () => await CreateCall()" Color="Color.Inherit" Icon="@Icons.Material.Filled.AddIcCall"/>
+
+@code {
+    [Parameter] [Required] public CallData CallData { get; set; }
+    private readonly DialogParameters _parameters = new()
+    {
+        { "ContentText", "New call" },
+        { "ButtonText", "Call" },
+        { "Color", Color.Info }
+    };
+
+    async Task CreateCall()
+    {
+        var options = new DialogOptions { CloseButton = true, FullWidth = true};
+
+        var dialogResult = DialogService.Show<CreateCallModal>("New call", _parameters, options);
+        var result = await dialogResult.Result;
+
+        if (!result.Cancelled)
+        {
+            var output = result.Data as CreateCallFormData;
+            dispatcher.Dispatch(new CallingServerCreateCallAction(new CommunicationUserIdentifier(output.Source), output.Targets, output.AlternateCallerId));
+        }
+    }
+}

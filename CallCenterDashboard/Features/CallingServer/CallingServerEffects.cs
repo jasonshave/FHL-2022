@@ -150,12 +150,12 @@ public class CallingServerEffects
             var id = Guid.NewGuid().ToString();
             var callbackUri = $"{_callbackUri}/api/calls/{id}";
 
-            CallSource callSource = new CallSource(action.Source)
-            {
-                CallerId = action.AlternateCallerId
-            };
+            CallSource callSource = new CallSource(action.Source);
+
+            if (action.AlternateCallerId is not null) callSource.CallerId = action.AlternateCallerId;
 
             CreateCallResult createCallResult = await _callingServerClient.CreateCallAsync(callSource, action.Targets, new Uri(callbackUri));
+
             var callData = new CallData(
                 createCallResult.CallProperties.CallSource.Identifier.RawId,
                 createCallResult.CallProperties.Targets[0].RawId,
@@ -166,10 +166,6 @@ public class CallingServerEffects
             _callDataRepository.Add(id, callData);
 
             dispatcher.Dispatch(new ActiveCallsAddAction(callData));
-
-            var notification = new NotificationData("Call started...", nameof(CallingServerCreateCallAction),
-                Severity.Success);
-            dispatcher.Dispatch(new CallingServerNotifyAction(notification));
         }
         catch (RequestFailedException e)
         {
@@ -187,7 +183,6 @@ public class CallingServerEffects
             var id = Guid.NewGuid().ToString();
             var callbackUri = new Uri($"{_callbackUri}/api/calls/{id}");
             AnswerCallResult answerCallResult = await _callingServerClient.AnswerCallAsync(action.UnansweredCall.IncomingCall.IncomingCallContext, callbackUri);
-            dispatcher.Dispatch(new UnansweredCallsRemoveAction(action.UnansweredCall));
             _callDataRepository.Add(id,
                 new CallData(action.UnansweredCall.IncomingCall.From.RawId,
                     action.UnansweredCall.IncomingCall.To.RawId,
@@ -195,6 +190,8 @@ public class CallingServerEffects
                     answerCallResult.CallProperties.CallConnectionId,
                     action.UnansweredCall.IncomingCall.CorrelationId,
                     id));
+
+            dispatcher.Dispatch(new UnansweredCallsRemoveAction(action.UnansweredCall));
         }
         catch (RequestFailedException e)
         {

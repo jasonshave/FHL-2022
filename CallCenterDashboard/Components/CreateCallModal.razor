@@ -28,7 +28,7 @@
                 </MudList>
                 @if (alternateIdSelected)
                 {
-                    <MudSelect T="string" @bind-Value="alternateCallerId" Label="Alternate caller ID number" SelectedValuesChanged="() => ReceiveAlternateCallerIdValue(target)">
+                    <MudSelect T="string" @bind-Value="alternateCallerId" Label="Alternate caller ID number">
                         @foreach (var configuration in purchasedPhoneNumbersState.Value.PhoneNumberConfigurations)
                         {
                             <MudSelectItem Value="configuration.PhoneNumber.PhoneNumber">@configuration.PhoneNumber.PhoneNumber</MudSelectItem>
@@ -81,11 +81,6 @@
         StateHasChanged();
         
         await base.OnInitializedAsync();
-    }
-
-    void ReceiveAlternateCallerIdValue(string value)
-    {
-
     }
 
     void AddTarget()

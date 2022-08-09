@@ -1,4 +1,5 @@
 ﻿@using CallingDashboard.Models
+
 @inherits FluxorComponent
 @inject IState<EventLogState> eventLogState
 
@@ -19,7 +20,7 @@
             <MudTd DataLabel="Event">@context.EventName</MudTd>
             <MudTd DataLabel="Date">@context.EventDateTime.LocalDateTime</MudTd>
             <MudTd DataLabel="">@context.CallConnectionId</MudTd>
-            <MudTd DataLabel="CorrelationId"> <MudLink Href="@($"https://ngc.skype.net/call/{@context.CorrelationId}")" Target="_blank">@context.CorrelationId</MudLink></MudTd>
+            <MudTd DataLabel="CorrelationId">@context.CorrelationId</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new []{10, 50, 100}" />

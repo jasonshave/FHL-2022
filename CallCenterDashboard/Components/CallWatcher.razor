@@ -6,25 +6,15 @@
 @using CallingDashboard.Features.CallingServer
 
 @inherits FluxorComponent
-@inject IState<PurchasedPhoneNumbersState> purchasedPhoneNumbersState
+
 @inject IDispatcher dispatcher
 @inject ICallingServerEventSubscriber callingServerEventSubscriber
 
 @code {
     protected override void OnInitialized()
     {
-        //SubscribeToAction<PurchasedPhoneNumbersSetLoadedAction>(_ =>
-        //{
-        //    var numbers = purchasedPhoneNumbersState.Value.PhoneNumberConfigurations.ToList();
-        //    foreach (var number in numbers)
-        //    {
-        //        UpdateEventHandling(number);
-        //    }
-        //});
-
         SubscribeToAction<PurchasedPhoneNumbersSetAnswerModeAction>(p => UpdateEventHandling(p.PhoneNumberConfiguration));
-        
-        base.OnInitializedAsync();
+        base.OnInitialized();
     }
 
     void UpdateEventHandling(PhoneNumberConfiguration number)

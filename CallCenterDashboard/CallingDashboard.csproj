@@ -16,7 +16,6 @@
     <PackageReference Include="Fluxor.Blazor.Web" Version="5.4.0" />
     <PackageReference Include="JasonShave.Azure.Communication.Service.EventHandler.CallingServer" Version="1.0.0-alpha-2022-07-31.1" />
     <PackageReference Include="MudBlazor" Version="6.0.14" />
-    <PackageReference Include="MudBlazor.ThemeManager" Version="1.0.7" />
   </ItemGroup>
 
   <ItemGroup>

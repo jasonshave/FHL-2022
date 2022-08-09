@@ -1,8 +1,4 @@
-﻿
-@using CallingDashboard.Features.ActiveCalls
-@using CallingDashboard.Models
-@inherits FluxorComponent
-@inject IState<ActiveCallsState> activeCallState
+﻿@inject IState<ActiveCallsState> activeCallState
 
 <MudTable Items="@activeCallState.Value.CallData" Hover="true" Breakpoint="Breakpoint.Sm" T="CallData">
     <HeaderContent>

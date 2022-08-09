@@ -28,6 +28,7 @@ builder.Services.AddSingleton(new PhoneNumbersClient(builder.Configuration["ACS:
 builder.Services.AddSingleton<IRepository<CallData>, InMemoryRepository<CallData>>();
 builder.Services.AddSingleton<IRepository<EventLogData>, InMemoryRepository<EventLogData>>();
 builder.Services.AddSingleton<IApplicationSettingsService, ApplicationSettingsService>();
+builder.Services.AddScoped<IClipboardService, ClipboardService>();
 
 builder.Services.AddFluxor(x => x.ScanAssemblies(typeof(Program).Assembly));
 

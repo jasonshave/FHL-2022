@@ -1,0 +1,37 @@
+﻿@using Azure.Communication.Identity
+@using CallingDashboard.Interfaces
+
+@inject CommunicationIdentityClient identityClient
+@inject IDispatcher dispatcher
+
+<MudPaper class="pa-4">
+    <EditForm Model="model" OnValidSubmit="CreateId">
+        <DataAnnotationsValidator/>
+        <MudText Typo="Typo.h5">Generate a test identity</MudText>
+        <MudText Typo="Typo.body2">
+            Use this section to create an Azure Communication Services use identity for testing various scenarios.
+        </MudText>
+        <MudTextField ReadOnly="true" Label="Identity" HelperText="Azure Communication Services identity" @bind-Value="model.Id" Variant="Variant.Text"/>
+        <MudTextField ReadOnly="true" Lines="6" Label="Token" HelperText="Token used to authenticate the identity." @bind-Value="model.Token" Variant="Variant.Text"/>
+        <MudDivider/>
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Info" StartIcon="@Icons.Material.Filled.PersonAdd">Generate Id</MudButton>
+    </EditForm>
+</MudPaper>
+
+@code {
+    readonly AcsIdentityFormData model = new();
+
+    async Task CreateId()
+    {
+        try
+        {
+            CommunicationUserIdentifierAndToken response = await identityClient.CreateUserAndTokenAsync(new List<CommunicationTokenScope>() { CommunicationTokenScope.VoIP });
+            model.Id = response.User.RawId;
+            model.Token = response.AccessToken.Token;
+        }
+        catch (Exception e)
+        {
+            dispatcher.Dispatch(new CallingServerNotifyAction(new NotificationData(e.Message, nameof(CallingServerNotifyAction), Severity.Error)));
+        }
+    }
+}

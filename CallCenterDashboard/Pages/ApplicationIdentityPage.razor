@@ -9,23 +9,30 @@
 <PageTitle>ACS - Application Identity</PageTitle>
 <MudBreadcrumbs Items="_items"/>
 <MudContainer>
-    <MudPaper class="pa-4">
-        <EditForm Model="model" OnValidSubmit="Submit">
-            <DataAnnotationsValidator />
-            <MudText Typo="Typo.h4">Application Identity</MudText>
-            <MudText Typo="Typo.body1">
-                The Communication Services identity is used to perform certain actions within this application such as placing calls using the Call Automation SDK.
-                Once set, both the application name and identity are preserved until the web application is restarted.
-            </MudText>
-            <MudTextField Disabled="isRegistered" Label="Name" HelperText="Enter a name for this application." @bind-Value="model.Name" For="@(() => model.Name)" Adornment="@adornment" AdornmentIcon="@Icons.Material.Filled.CheckCircle" AdornmentColor="Color.Success"/>
-            <MudTextField Disabled="isRegistered" HelperText="Click to request an identity." @bind-Value="rawId" Variant="Variant.Text" Adornment="@adornment" AdornmentIcon="@Icons.Material.Filled.CheckCircle" AdornmentColor="Color.Success"/>
-            <MudDivider/>
-            <MudButton Disabled="isRegistered" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
-                Register
-            </MudButton>
-        </EditForm>
+    <MudGrid>
+        <MudItem xs="12">
+            <MudPaper class="pa-4">
+                <EditForm Model="model" OnValidSubmit="CreateAndSetApplicationId">
+                    <DataAnnotationsValidator/>
+                    <MudText Typo="Typo.h5">Application identity</MudText>
+                    <MudText Typo="Typo.body2">
+                        The Communication Services identity is used to perform certain actions within this application such as placing calls using the Call Automation SDK.
+                        Once set, both the application name and identity are preserved until the web application is restarted.
+                    </MudText>
+                    <MudTextField ReadOnly="isRegistered" Label="Name" HelperText="Enter a name for this application." @bind-Value="model.Name" For="@(() => model.Name)" Adornment="@adornment" AdornmentIcon="@Icons.Material.Filled.CheckCircle" AdornmentColor="Color.Success"/>
+                    <MudTextField Label="Identity" ReadOnly="true" HelperText="Click to request an identity." @bind-Value="rawId" Variant="Variant.Text" Adornment="@adornment" AdornmentIcon="@Icons.Material.Filled.CheckCircle" AdornmentColor="Color.Success"/>
+                    <MudDivider/>
+                    <MudButton Disabled="isRegistered" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Create">
+                        Register
+                    </MudButton>
+                </EditForm>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12">
+            <CreateIdentity/>
+        </MudItem>
+    </MudGrid>
 
-    </MudPaper>
 </MudContainer>
 
 @code {
@@ -67,7 +74,7 @@
         base.OnInitialized();
     }
 
-    void Submit(EditContext context)
+    void CreateAndSetApplicationId(EditContext context)
     {
         dispatcher.Dispatch(new ApplicationIdentitySetNameAction(model.Name));
     }

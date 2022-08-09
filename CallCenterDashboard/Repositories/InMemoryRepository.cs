@@ -1,6 +1,5 @@
 ﻿using CallingDashboard.Interfaces;
 using System.Collections.Concurrent;
-using CallingDashboard.Interfaces;
 
 namespace CallingDashboard.Repositories
 {

@@ -1,0 +1,63 @@
+﻿@using Azure.Communication.JobRouter
+@using Azure.Communication.JobRouter.Models
+@inject RouterAdministrationClient routerAdministrationClient
+
+@if (loading)
+{
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"/>
+}
+else
+{
+    <MudTable Items="@policies" Hover="true" Breakpoint="Breakpoint.Sm" T="ClassificationPolicyItem">
+        <HeaderContent>
+            <MudTh>Name</MudTh>
+            <MudTh>Policy Id</MudTh>
+            <MudTh>Fallback Queue</MudTh>
+            <MudTh>Prioritization kind</MudTh>
+            <MudTh>Exception Policy</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.ClassificationPolicy.Name</MudTd>
+            <MudTd>@context.ClassificationPolicy.Id</MudTd>
+            <MudTd>@context.ClassificationPolicy.FallbackQueueId</MudTd>
+            <MudTd>@context.ClassificationPolicy.PrioritizationRule.Kind</MudTd>
+            <MudTd>
+                @foreach (var queueSelectorAttachment in context.ClassificationPolicy.QueueSelectors)
+                {
+                    <MudText>@queueSelectorAttachment</MudText>
+                }
+            </MudTd>
+            <MudTd>
+                @foreach (var workerSelectorAttachment in context.ClassificationPolicy.WorkerSelectors)
+                {
+                    <MudText>@workerSelectorAttachment</MudText>
+                }
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+
+
+@code {
+    readonly List<ClassificationPolicyItem> policies = new ();
+    bool loading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+        await base.OnInitializedAsync();
+    }
+
+    async Task Refresh()
+    {
+        loading = true;
+        var pages = routerAdministrationClient.GetClassificationPoliciesAsync();
+        await foreach (var item in pages.AsPages())
+        {
+            policies.AddRange(item.Values);
+        }
+        StateHasChanged();
+        loading = false;
+    }
+}

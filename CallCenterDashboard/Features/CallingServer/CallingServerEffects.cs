@@ -5,7 +5,7 @@ using CallingDashboard.Features.UnansweredCalls;
 using CallingDashboard.Interfaces;
 using CallingDashboard.Models;
 using Fluxor;
-using JasonShave.Azure.Communication.Service.EventHandler.CallingServer;
+using JasonShave.Azure.Communication.Service.EventHandler.CallAutomation;
 using MudBlazor;
 
 namespace CallingDashboard.Features.CallingServer;
@@ -13,18 +13,18 @@ namespace CallingDashboard.Features.CallingServer;
 public class CallingServerEffects
 {
     private readonly IRepository<CallData> _callDataRepository;
-    private readonly ICallingServerEventSubscriber _callingServerEventSubscriber;
-    private readonly CallingServerClient _callingServerClient;
+    private readonly ICallAutomationEventSubscriber _callAutomationEventSubscriber;
+    private readonly CallAutomationClient _callingServerClient;
     private readonly string _callbackUri;
 
     public CallingServerEffects(
         IRepository<CallData> callDataRepository,
-        ICallingServerEventSubscriber callingServerEventSubscriber,
-        CallingServerClient callingServerClient,
+        ICallAutomationEventSubscriber callAutomationEventSubscriber,
+        CallAutomationClient callingServerClient,
         IConfiguration configuration)
     {
         _callDataRepository = callDataRepository;
-        _callingServerEventSubscriber = callingServerEventSubscriber;
+        _callAutomationEventSubscriber = callAutomationEventSubscriber;
         _callingServerClient = callingServerClient;
         _callbackUri = configuration["ACS:CallbackUri"];
     }
@@ -50,7 +50,7 @@ public class CallingServerEffects
     {
         try
         {
-            await _callingServerClient.GetCallConnection(action.CallData.CallConnectionId).HangupAsync(false);
+            await _callingServerClient.GetCallConnection(action.CallData.CallConnectionId).HangUpAsync(false);
         }
         catch (RequestFailedException e)
         {
@@ -64,7 +64,7 @@ public class CallingServerEffects
     {
         try
         {
-            await _callingServerClient.GetCallConnection(action.CallData.CallConnectionId).HangupAsync(true);
+            await _callingServerClient.GetCallConnection(action.CallData.CallConnectionId).HangUpAsync(true);
         }
         catch (RequestFailedException e)
         {
@@ -157,10 +157,10 @@ public class CallingServerEffects
             CreateCallResult createCallResult = await _callingServerClient.CreateCallAsync(callSource, action.Targets, new Uri(callbackUri));
 
             var callData = new CallData(
-                createCallResult.CallProperties.CallSource.Identifier.RawId,
-                createCallResult.CallProperties.Targets[0].RawId,
+                From: createCallResult.CallConnectionProperties.CallSource.Identifier.RawId,
+                To: createCallResult.CallConnectionProperties.Targets[0].RawId,
                 DateTimeOffset.UtcNow,
-                createCallResult.CallProperties.CallConnectionId,
+                createCallResult.CallConnectionProperties.CallConnectionId,
                 null,
                 id);
             _callDataRepository.Add(id, callData);
@@ -187,7 +187,7 @@ public class CallingServerEffects
                 new CallData(action.UnansweredCall.IncomingCall.From.RawId,
                     action.UnansweredCall.IncomingCall.To.RawId,
                     DateTimeOffset.UtcNow,
-                    answerCallResult.CallProperties.CallConnectionId,
+                    answerCallResult.CallConnectionProperties.CallConnectionId,
                     action.UnansweredCall.IncomingCall.CorrelationId,
                     id));
 

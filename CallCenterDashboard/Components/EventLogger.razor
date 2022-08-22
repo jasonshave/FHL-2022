@@ -1,13 +1,14 @@
-﻿@using JasonShave.Azure.Communication.Service.EventHandler.CallingServer
-@using JasonShave.Azure.Communication.Service.CallingServer.Sdk.Contracts
-@using JasonShave.Azure.Communication.Service.CallingServer.Sdk.Contracts.V2022_11_1_preview.Events
+﻿
 @using CallingDashboard.Features.EventLog
 @using CallingDashboard.Models
+@using JasonShave.Azure.Communication.Service.CallAutomation.Sdk.Contracts
+@using JasonShave.Azure.Communication.Service.EventHandler.CallAutomation
+@using Azure.Communication.CallingServer
 
 @inherits FluxorComponent
 @inject IDispatcher dispatcher;
 @inject IState<EventLogState> eventLogState
-@inject ICallingServerEventSubscriber callingServerEventSubscriber
+@inject ICallAutomationEventSubscriber callAutomationEventSubscriber
 
 @code {
 
@@ -15,19 +16,19 @@
     {
         if (!eventLogState.Value.Initialized)
         {
-            callingServerEventSubscriber.OnIncomingCall += HandleIncomingCall;
-            callingServerEventSubscriber.OnCallConnected += Handle;
-            callingServerEventSubscriber.OnCallDisconnected += Handle;
-            callingServerEventSubscriber.OnCallTransferAccepted += Handle;
-            callingServerEventSubscriber.OnCallTransferFailed += Handle;
-            callingServerEventSubscriber.OnParticipantsUpdated += Handle;
+            callAutomationEventSubscriber.OnIncomingCall += HandleIncomingCall;
+            callAutomationEventSubscriber.OnCallConnected += Handle;
+            callAutomationEventSubscriber.OnCallDisconnected += Handle;
+            callAutomationEventSubscriber.OnCallTransferAccepted += Handle;
+            callAutomationEventSubscriber.OnCallTransferFailed += Handle;
+            callAutomationEventSubscriber.OnParticipantsUpdated += Handle;
         }
 
         base.OnInitialized();
     }
 
     private ValueTask Handle<TEvent>(TEvent @event, string? contextId)
-        where TEvent: BaseCallingEvent
+        where TEvent: CallAutomationEventBase
     {
         var eventLogData = new EventLogData(typeof(TEvent).Name, DateTimeOffset.UtcNow, @event.CallConnectionId, @event.CorrelationId);
         dispatcher.Dispatch(new EventLogAddAction(eventLogData));

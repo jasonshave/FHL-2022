@@ -1,0 +1,50 @@
+﻿@using Azure.Communication.JobRouter
+@using Azure.Communication.JobRouter.Models
+@inject RouterAdministrationClient routerAdministrationClient
+
+@if (loading)
+{
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"/>
+}
+else
+{
+    <MudTable Items="@policies" Hover="true" Breakpoint="Breakpoint.Sm" T="JobQueueItem">
+        <HeaderContent>
+            <MudTh>Name</MudTh>
+            <MudTh>Queue Id</MudTh>
+            <MudTh>Distribution Policy</MudTh>
+            <MudTh>Exception Policy</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.JobQueue.Name</MudTd>
+            <MudTd DataLabel="Name">@context.JobQueue.Id</MudTd>
+            <MudTd DataLabel="To">@context.JobQueue.DistributionPolicyId</MudTd>
+            <MudTd DataLabel="Duration(s)">@context.JobQueue.ExceptionPolicyId</MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+
+
+@code {
+    readonly List<JobQueueItem> policies = new ();
+    bool loading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+        await base.OnInitializedAsync();
+    }
+
+    async Task Refresh()
+    {
+        loading = true;
+        var pages = routerAdministrationClient.GetQueuesAsync();
+        await foreach (var item in pages.AsPages())
+        {
+            policies.AddRange(item.Values);
+        }
+        StateHasChanged();
+        loading = false;
+    }
+}

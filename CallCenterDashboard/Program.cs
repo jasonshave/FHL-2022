@@ -10,25 +10,35 @@ using CallingDashboard.Repositories;
 using CallingDashboard.Services;
 using Fluxor;
 using JasonShave.Azure.Communication.Service.EventHandler;
-using JasonShave.Azure.Communication.Service.EventHandler.CallingServer;
 using Microsoft.AspNetCore.Mvc;
 using MudBlazor.Services;
 using System.Text.Json;
+using Azure.Communication.JobRouter;
+using JasonShave.Azure.Communication.Service.EventHandler.CallAutomation;
+using JasonShave.Azure.Communication.Service.EventHandler.JobRouter;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMudServices();
 
-builder.Services.AddEventHandlerServices(option => option.PropertyNameCaseInsensitive = true)
-    .AddCallingServerEventHandling();
+builder.Services.AddEventHandlerServices()
+    .AddCallAutomationEventHandling()
+    .AddJobRouterEventHandling();
 
-builder.Services.AddSingleton(new CallingServerClient(builder.Configuration["ACS:ConnectionString"]));
+// ACS SDKs
+builder.Services.AddSingleton(new CallAutomationClient(builder.Configuration["ACS:ConnectionString"]));
 builder.Services.AddSingleton(new CommunicationIdentityClient(builder.Configuration["ACS:ConnectionString"]));
 builder.Services.AddSingleton(new PhoneNumbersClient(builder.Configuration["ACS:ConnectionString"]));
+builder.Services.AddSingleton(new RouterAdministrationClient(builder.Configuration["ACS:ConnectionString"]));
+builder.Services.AddSingleton(new RouterClient(builder.Configuration["ACS:ConnectionString"]));
+
 builder.Services.AddSingleton<IRepository<CallData>, InMemoryRepository<CallData>>();
 builder.Services.AddSingleton<IRepository<EventLogData>, InMemoryRepository<EventLogData>>();
+builder.Services.AddSingleton<IRepository<MediaData>, InMemoryRepository<MediaData>>();
 builder.Services.AddSingleton<IApplicationSettingsService, ApplicationSettingsService>();
+
 builder.Services.AddScoped<IClipboardService, ClipboardService>();
+builder.Services.AddSingleton<IMediaDataService, MediaDataService>();
 
 builder.Services.AddFluxor(x => x.ScanAssemblies(typeof(Program).Assembly));
 
@@ -53,8 +63,7 @@ app.UseRouting();
 
 app.MapPost("/api/incomingCall", (
     [FromBody] EventGridEvent[] eventGridEvents,
-    [FromServices] IEventPublisher<Calling> publisher,
-    [FromServices] CallingServerClient callingServerClient) =>
+    [FromServices] IEventPublisher<Calling> publisher) =>
 {
     foreach (EventGridEvent eventGridEvent in eventGridEvents)
     {
@@ -72,10 +81,20 @@ app.MapPost("/api/incomingCall", (
             }
         }
 
-        publisher.Publish(eventGridEvent.Data.ToString(), eventGridEvent.EventType);
+        publisher.Publish(eventGridEvent);
     }
 
     return Results.Ok();
+}).Produces(StatusCodes.Status200OK);
+
+app.MapPost("/api/jobRouter", (
+    [FromBody] EventGridEvent[] eventGridEvents,
+    [FromServices] IEventPublisher<Router> publisher) =>
+{
+    foreach (EventGridEvent eventGridEvent in eventGridEvents)
+    {
+        publisher.Publish(eventGridEvent);
+    }
 }).Produces(StatusCodes.Status200OK);
 
 app.MapPost("/api/calls/{contextId}", async (
@@ -95,7 +114,7 @@ app.MapPost("/api/calls/{contextId}", async (
     foreach (var @event in cloudEvents)
     {
         logger.LogInformation($"Publishing {@event.Type}");
-        publisher.Publish(@event.Data.ToString(), @event.Type, contextId);
+        publisher.Publish(@event, contextId);
     }
 
     return Results.Ok();

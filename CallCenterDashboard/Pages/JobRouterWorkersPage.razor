@@ -1,0 +1,21 @@
+﻿@page "/jobRouter/workers"
+
+<PageTitle>Job Router Workers</PageTitle>
+<MudBreadcrumbs Items="_items"/>
+<MudContainer>
+    <MudPaper class="pa-4">
+        <MudText Typo="Typo.h5">
+            <MudIcon Icon="@Icons.Material.Filled.SupportAgent"/>
+            Workers
+        </MudText>
+        <JobRouterWorkerTable/>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    readonly List<BreadcrumbItem> _items = new()
+    {
+        new BreadcrumbItem("Dashboard", href: "#"),
+        new BreadcrumbItem("Workers", href: null, disabled: true)
+    };
+}

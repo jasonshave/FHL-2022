@@ -3,28 +3,24 @@ using CallingDashboard.Features.UnansweredCalls;
 using CallingDashboard.Interfaces;
 using CallingDashboard.Models;
 using Fluxor;
-using JasonShave.Azure.Communication.Service.EventHandler.CallingServer;
+using JasonShave.Azure.Communication.Service.EventHandler.CallAutomation;
 
 namespace CallingDashboard.Features.AutoAnswer;
 
 public class AutoAnswerEffects
 {
-    private readonly ICallingServerEventSubscriber _callingServerEventSubscriber;
-    private readonly IApplicationSettingsService _applicationSettingsService;
+    private readonly ICallAutomationEventSubscriber _callAutomationEventSubscriber;
 
     public AutoAnswerEffects(
-        ICallingServerEventSubscriber callingServerEventSubscriber,
-        IApplicationSettingsService applicationSettingsService)
+        ICallAutomationEventSubscriber callAutomationEventSubscriber)
     {
-        _callingServerEventSubscriber = callingServerEventSubscriber;
-        _applicationSettingsService = applicationSettingsService;
+        _callAutomationEventSubscriber = callAutomationEventSubscriber;
     }
-
 
     [EffectMethod]
     public async Task OnSet(AutoAnswerSetAction action, IDispatcher dispatcher)
     {
-        _callingServerEventSubscriber.OnIncomingCall += (e, c) =>
+        _callAutomationEventSubscriber.OnIncomingCall += (e, c) =>
         {
             switch (action.Enabled)
             {

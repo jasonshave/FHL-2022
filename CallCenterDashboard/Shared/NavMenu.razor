@@ -12,7 +12,11 @@
             <MudNavLink Href="identity" IconColor="Color.Default" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.Computer">Identity</MudNavLink>
             <MudNavLink Href="phoneNumbers" IconColor="Color.Default" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.Numbers">Phone Numbers</MudNavLink>
             <MudNavLink Href="mediaLinks" IconColor="Color.Default" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.MusicNote">Media</MudNavLink>
-            <MudNavLink Href="jobRouter" IconColor="Color.Default" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.Queue">Call Queueing</MudNavLink>
+            <MudNavGroup Title="Job Router">
+                <MudNavLink Href="jobRouter/policies" IconColor="Color.Default" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.Policy">Queues & Policies</MudNavLink>
+                <MudNavLink Href="jobRouter/workers" IconColor="Color.Default" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.SupportAgent">Workers</MudNavLink>
+                <MudNavLink Href="jobRouter/jobs" IconColor="Color.Default" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.Work">Jobs</MudNavLink>
+            </MudNavGroup>
             <MudNavLink Href="eventHistory" IconColor="Color.Default" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.Notes">Event History</MudNavLink>
         </MudNavMenu>
     </MudPaper>

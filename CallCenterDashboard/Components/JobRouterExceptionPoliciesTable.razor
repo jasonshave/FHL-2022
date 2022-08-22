@@ -1,0 +1,56 @@
+﻿@using Azure.Communication.JobRouter
+@using Azure.Communication.JobRouter.Models
+@inject RouterAdministrationClient routerAdministrationClient
+
+@if (loading)
+{
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"/>
+}
+else
+{
+    <MudTable Items="@items" Hover="true" Breakpoint="Breakpoint.Sm" T="ExceptionPolicyItem">
+        <HeaderContent>
+            <MudTh>Name</MudTh>
+            <MudTh>Policy Id</MudTh>
+            <MudTh>Rules</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.ExceptionPolicy.Name</MudTd>
+            <MudTd DataLabel="Id">@context.ExceptionPolicy.Id</MudTd>
+            <MudTd DataLabel="ExceptionRules">
+                @foreach (var rule in @context.ExceptionPolicy.ExceptionRules)
+                {
+                    <MudText>Rule Id: @rule.Key</MudText>
+                    @foreach (var exceptionRule in @rule.Value.Actions)
+                    {
+                        <MudText>Action Id: @exceptionRule.Key</MudText>
+                        <MudText>Action: @exceptionRule.Value.GetType().Name</MudText>
+                    }
+                }
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+@code {
+    readonly List<ExceptionPolicyItem> items = new ();
+    bool loading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+        await base.OnInitializedAsync();
+    }
+
+    async Task Refresh()
+    {
+        loading = true;
+        var policyPages = routerAdministrationClient.GetExceptionPoliciesAsync();
+        await foreach (var item in policyPages.AsPages())
+        {
+            items.AddRange(item.Values);
+        }
+        loading = false;
+        StateHasChanged();
+    }
+}

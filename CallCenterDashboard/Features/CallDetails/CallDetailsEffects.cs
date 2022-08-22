@@ -1,37 +1,37 @@
 ﻿using Azure.Communication.CallingServer;
 using Fluxor;
-using JasonShave.Azure.Communication.Service.EventHandler.CallingServer;
+using JasonShave.Azure.Communication.Service.EventHandler.CallAutomation;
 
 namespace CallingDashboard.Features.CallDetails
 {
     public class CallDetailsEffects
     {
-        private readonly ICallingServerEventSubscriber _callingServerEventSubscriber;
-        private readonly CallingServerClient _callingServerClient;
+        private readonly ICallAutomationEventSubscriber _callAutomationEventSubscriber;
+        private readonly CallAutomationClient _callAutomationClient;
         private readonly IState<CallDetailsState> _state;
 
         public CallDetailsEffects(
-            ICallingServerEventSubscriber callingServerEventSubscriber,
-            CallingServerClient callingServerClient,
+            ICallAutomationEventSubscriber callAutomationEventSubscriber,
+            CallAutomationClient callAutomationClient,
             IState<CallDetailsState> state)
         {
-            _callingServerEventSubscriber = callingServerEventSubscriber;
-            _callingServerClient = callingServerClient;
+            _callAutomationEventSubscriber = callAutomationEventSubscriber;
+            _callAutomationClient = callAutomationClient;
             _state = state;
         }
 
         [EffectMethod(typeof(CallDetailStateInializeAction))]
-        public async Task OnStateInitialzie(IDispatcher dispatcher)
+        public async Task OnStateInitialize(IDispatcher dispatcher)
         {
 
-            _callingServerEventSubscriber.OnParticipantsUpdated += (@event, contextId) =>
+            _callAutomationEventSubscriber.OnParticipantsUpdated += (@event, contextId) =>
             {
                 dispatcher.Dispatch(new ParticipantUpdateAction(@event.CallConnectionId));
 
                 return ValueTask.CompletedTask;
             };
 
-            _callingServerEventSubscriber.OnCallDisconnected += (@event, contextId) =>
+            _callAutomationEventSubscriber.OnCallDisconnected += (@event, contextId) =>
             {
                 dispatcher.Dispatch(new CallDetailClearAction(@event.CallConnectionId));
 
@@ -42,10 +42,10 @@ namespace CallingDashboard.Features.CallDetails
         [EffectMethod]
         public async Task OnInitialize(CallDetailInitializeAction action, IDispatcher dispatcher)
         {
-            var callConnection = _callingServerClient.GetCallConnection(action.Id);
+            var callConnection = _callAutomationClient.GetCallConnection(action.Id);
             try
             {
-                CallConnectionProperties callConnectionProperties = callConnection.GetProperties();
+                CallConnectionProperties callConnectionProperties = await callConnection.GetCallConnectionPropertiesAsync();
                 var participants = (await callConnection.GetParticipantsAsync()).Value;
                 dispatcher.Dispatch(new CallDetailSetDataAction(
                     action.Id,
@@ -68,7 +68,7 @@ namespace CallingDashboard.Features.CallDetails
         {
             if (_state.Value.PreviousId == action.Id)
             {
-                var callConnection = _callingServerClient.GetCallConnection(action.Id);
+                var callConnection = _callAutomationClient.GetCallConnection(action.Id);
                 try
                 {
                     var participants = (await callConnection.GetParticipantsAsync()).Value;

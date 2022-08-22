@@ -1,0 +1,48 @@
+﻿@using Azure.Communication.JobRouter
+@using Azure.Communication.JobRouter.Models
+@inject RouterAdministrationClient routerAdministrationClient
+
+@if (loading)
+{
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"/>
+}
+else
+{
+    <MudTable Items="@items" Hover="true" Breakpoint="Breakpoint.Sm" T="DistributionPolicyItem">
+        <HeaderContent>
+            <MudTh>Name</MudTh>
+            <MudTh>Policy Id</MudTh>
+            <MudTh>Offer Mode</MudTh>
+            <MudTh>TTL</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.DistributionPolicy.Name</MudTd>
+            <MudTd DataLabel="Id">@context.DistributionPolicy.Id</MudTd>
+            <MudTd DataLabel="Mode">@context.DistributionPolicy.Mode.GetType().Name</MudTd>
+            <MudTd DataLabel="TTL">@context.DistributionPolicy.OfferTtl</MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+@code {
+    readonly List<DistributionPolicyItem> items = new ();
+    bool loading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+        await base.OnInitializedAsync();
+    }
+
+    async Task Refresh()
+    {
+        loading = true;
+        var policyPages = routerAdministrationClient.GetDistributionPoliciesAsync();
+        await foreach (var item in policyPages.AsPages())
+        {
+            items.AddRange(item.Values);
+        }
+        loading = false;
+        StateHasChanged();
+    }
+}

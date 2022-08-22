@@ -1,0 +1,35 @@
+﻿@using Azure.Communication.JobRouter.Models
+
+<MudPaper @onclick="@(() => JobStatusSelectionCallback.InvokeAsync(JobStatus))" Class="@("d-flex flex-column align-center pa-1" + _mouseOverClass )" @onmouseover="OnMouseOver" @onmouseleave="OnMouseLeave" Elevation="_elevation">
+    @if (Loading)
+    {
+        <MudProgressCircular Color="Color.Secondary" Indeterminate="true"/>
+    }
+    else
+    {
+        <MudText Typo="Typo.h3" Color="Color.Primary">@Count</MudText>
+    }
+    <MudText Class="pa-4" Typo="Typo.caption" Color="Color.Secondary">@JobStatus.ToString().ToUpper()</MudText>
+</MudPaper>
+
+@code {
+    [Parameter] public int Count { get; set; }
+    [Parameter] public bool Loading { get; set; }
+    [Parameter] public RouterJobStatus JobStatus { get; set; }
+    [Parameter] public EventCallback<RouterJobStatus> JobStatusSelectionCallback { get; set; }
+
+    int _elevation = 1;
+    string _mouseOverClass = "cursor-auto";
+
+    void OnMouseOver()
+    {
+        _elevation = 4;
+        _mouseOverClass = "cursor-pointer";
+    }
+
+    void OnMouseLeave()
+    {
+        _elevation = 1;
+        _mouseOverClass = "cursor-auto";
+    }
+}

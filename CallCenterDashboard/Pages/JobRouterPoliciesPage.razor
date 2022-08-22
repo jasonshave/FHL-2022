@@ -1,0 +1,42 @@
+﻿@page "/jobRouter/policies"
+
+<PageTitle>Job Router Policies</PageTitle>
+<MudBreadcrumbs Items="_items"/>
+<MudContainer>
+    <MudPaper class="pa-4">
+        <MudText Typo="Typo.h5">
+            <MudIcon Icon="@Icons.Material.Filled.Queue"/>
+            Queues
+        </MudText>
+        <JobRouterQueuesTable/>
+    </MudPaper>
+    <MudPaper class="pa-4">
+        <MudText Typo="Typo.h5">
+            <MudIcon Icon="@Icons.Material.Filled.VerticalDistribute"></MudIcon>
+            Job Offer Distribution Policies
+        </MudText>
+        <JobRouterDistributionPolicyTable/>
+    </MudPaper>
+    <MudPaper class="pa-4">
+        <MudText Typo="Typo.h5">
+            <MudIcon Icon="@Icons.Material.Filled.Warning"/>
+            Exception Policies
+        </MudText>
+        <JobRouterExceptionPoliciesTable/>
+    </MudPaper>
+    <MudPaper Class="pa-4">
+        <MudText Typo="Typo.h5">
+            <MudIcon Icon="@Icons.Material.Filled.Class"/>
+            Classification Policies
+        </MudText>
+        <JobRouterClassificationPoliciesTable/>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    readonly List<BreadcrumbItem> _items = new()
+    {
+        new BreadcrumbItem("Dashboard", href: "#"),
+        new BreadcrumbItem("Policies", href: null, disabled: true)
+    };
+}

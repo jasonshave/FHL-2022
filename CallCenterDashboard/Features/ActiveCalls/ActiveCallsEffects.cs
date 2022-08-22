@@ -1,28 +1,28 @@
 ﻿using CallingDashboard.Interfaces;
 using CallingDashboard.Models;
 using Fluxor;
-using JasonShave.Azure.Communication.Service.EventHandler.CallingServer;
+using JasonShave.Azure.Communication.Service.EventHandler.CallAutomation;
 using MudBlazor;
 
 namespace CallingDashboard.Features.ActiveCalls;
 
 public class ActiveCallsEffects
 {
-    private readonly ICallingServerEventSubscriber _callingServerEventSubscriber;
+    private readonly ICallAutomationEventSubscriber _callAutomationEventSubscriber;
     private readonly IRepository<CallData> _callDataRepository;
 
     public ActiveCallsEffects(
-        ICallingServerEventSubscriber callingServerEventSubscriber,
+        ICallAutomationEventSubscriber callAutomationEventSubscriber,
         IRepository<CallData> callDataRepository)
     {
-        _callingServerEventSubscriber = callingServerEventSubscriber;
+        _callAutomationEventSubscriber = callAutomationEventSubscriber;
         _callDataRepository = callDataRepository;
     }
 
     [EffectMethod(typeof(ActiveCallsInitializeAction))]
     public Task OnInitialize(IDispatcher dispatcher)
     {
-        _callingServerEventSubscriber.OnCallConnected += (@event, contextId) =>
+        _callAutomationEventSubscriber.OnCallConnected += (@event, contextId) =>
         {
             var callData = _callDataRepository.Find(contextId);
             if (callData is not null) dispatcher.Dispatch(new ActiveCallsAddAction(callData));
@@ -30,7 +30,7 @@ public class ActiveCallsEffects
             return ValueTask.CompletedTask;
         };
 
-        _callingServerEventSubscriber.OnCallDisconnected += (@event, contextId) =>
+        _callAutomationEventSubscriber.OnCallDisconnected += (@event, contextId) =>
         {
             _callDataRepository.Remove(contextId);
             dispatcher.Dispatch(new ActiveCallsRemoveAction(contextId));

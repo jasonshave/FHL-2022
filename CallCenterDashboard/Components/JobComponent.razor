@@ -1,0 +1,25 @@
+﻿@using Azure.Communication.JobRouter.Models
+<MudPaper class="pa-4">
+    <MudGrid>
+        <MudItem xs="6">
+            <MudText>Job Id: @Job.RouterJob.Id</MudText>
+        </MudItem>
+        <MudItem xs="6">
+            <MudChip Color="Color.Primary">@Job.RouterJob.JobStatus.Value.ToString().ToUpper()</MudChip>
+        </MudItem>
+        <MudItem xs="6">
+            <MudText>Queued at: @Job.RouterJob.EnqueueTimeUtc.Value.LocalDateTime</MudText>
+        </MudItem>
+        <MudItem xs="6">
+            <MudText>Channel: @Job.RouterJob.ChannelId</MudText>
+        </MudItem>
+        <MudItem xs="6">
+            <MudText>Classification Policy: @Job.RouterJob.ClassificationPolicyId</MudText>
+        </MudItem>
+    </MudGrid>
+</MudPaper>
+
+
+@code {
+    [Parameter] public RouterJobItem Job { get; set; }
+}

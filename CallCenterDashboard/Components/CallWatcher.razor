@@ -1,4 +1,4 @@
-﻿@using JasonShave.Azure.Communication.Service.EventHandler.CallingServer
+﻿@using JasonShave.Azure.Communication.Service.EventHandler.CallAutomation
 @using JasonShave.Azure.Communication.Service.EventHandler.Sdk.Common
 @using CallingDashboard.Features.PurchasedPhoneNumbers
 @using CallingDashboard.Features.UnansweredCalls
@@ -8,7 +8,7 @@
 @inherits FluxorComponent
 
 @inject IDispatcher dispatcher
-@inject ICallingServerEventSubscriber callingServerEventSubscriber
+@inject ICallAutomationEventSubscriber callAutomationEventSubscriber
 
 @code {
     protected override void OnInitialized()
@@ -19,7 +19,7 @@
 
     void UpdateEventHandling(PhoneNumberConfiguration number)
     {
-        callingServerEventSubscriber.OnIncomingCall += (e, c) =>
+        callAutomationEventSubscriber.OnIncomingCall += (e, c) =>
         {
             if (e.To.PhoneNumber.Value == number.PhoneNumber.PhoneNumber)
             {

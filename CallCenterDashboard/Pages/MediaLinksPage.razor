@@ -1,18 +1,111 @@
 ﻿@page "/mediaLinks"
+@using CallingDashboard.Interfaces
+
+@inject IMediaDataService mediaDataService
 
 <MudBreadcrumbs Items="_items"/>
 <MudContainer>
-    <MudPaper class="pa-4">
-        <MudText Typo="Typo.h4">Media Links (coming soon)</MudText>
+    <MudPaper Class="pa-4">
+        <MudText Typo="Typo.h5">Add new media source</MudText>
+        <MudGrid>
+            <MudItem>
+                <EditForm Model="model" OnValidSubmit="OnValidAddOrEdit">
+                    <DataAnnotationsValidator/>
+                    <MudTextField @bind-Value="model.Name" For="() => model.Name" Label="Name" HelperText="Enter a name for the media source."/>
+                    <MudTextField @bind-Value="model.FileUri" For="() => model.FileUri" HelperText="Enter the location of the file (i.e. https://storage.mywebsite.com/files/welcome_message.wav)" Label="File URL" Adornment="Adornment.Start" AdornmentIcon="@Icons.Custom.Brands.MicrosoftAzure"/>
+                    <MudCheckBox @bind-Checked="model.Loop" For="() => model.Loop">Loop audio</MudCheckBox>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Save">Save</MudButton>
+                    <MudButton ButtonType="ButtonType.Button" Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Material.Filled.DeleteForever" OnClick="() => DeleteEntry(model.Id)">Delete</MudButton>
+                </EditForm>
+            </MudItem>
+        </MudGrid>
     </MudPaper>
+    @if (mediaDataService.List().Any())
+    {
+        <MudPaper Class="pa-4">
+            <MudText Typo="Typo.h5">Media sources (@mediaDataService.List().Count())</MudText>
+            <MudTable Items="mediaDataService.List()" Hover="true" RowClassFunc="@SelectRow" SelectedItemChanged="@(Callback)" T="MediaData" @ref="table">
+                <RowTemplate>
+                    <MudTd>@context.Name</MudTd>
+                    <MudTd>@context.FileUri.ToString()</MudTd>
+                    <MudTd>@context.Loop</MudTd>
+                    <MudTd>@context.Id</MudTd>
+                </RowTemplate>
+            </MudTable>
+        </MudPaper>
+    }
 </MudContainer>
+
+<style>
+    .selected {
+        background-color: cornflowerblue !important;
+    }
+
+    .selected > td {
+        color: white !important;
+    }
+
+    .selected > td .mud-input {
+        color: white !important;
+    }
+</style>
 
 @code {
     readonly List<BreadcrumbItem> _items = new()
     {
         new BreadcrumbItem("Dashboard", href: "#"),
-        new BreadcrumbItem("Media Links (coming soon)", href: null, disabled: true)
+        new BreadcrumbItem("Media", href: null, disabled: true)
     };
 
     bool loading;
+    private int selectedRowNumber = -1;
+    MediaData model = new();
+    private MudTable<MediaData> table;
+
+    void OnValidAddOrEdit()
+    {
+        var newModel = model;
+        if (string.IsNullOrEmpty(newModel.Id))
+        {
+            newModel.Id = Guid.NewGuid().ToString();
+        }
+        mediaDataService.Upsert(newModel);
+
+        model = new();
+        StateHasChanged();
+    }
+
+    void DeleteEntry(string? id)
+    {
+        if (id is null) return;
+        mediaDataService.Remove(id);
+        model = new ();
+        StateHasChanged();
+    }
+
+    private string SelectRow(MediaData data, int rowNumber)
+    {
+        if (selectedRowNumber == rowNumber)
+        {
+            // unselected
+            selectedRowNumber = -1;
+            return string.Empty;
+        }
+        if (table.SelectedItem != null && table.SelectedItem.Equals(data))
+        {
+            // selected
+            selectedRowNumber = rowNumber;
+            return "selected";
+        }
+        
+        // when added
+        return string.Empty;
+    }
+
+    private void Callback(MediaData data)
+    {
+        // fired when selected (first)
+        model = data;
+        StateHasChanged();
+    }
 }

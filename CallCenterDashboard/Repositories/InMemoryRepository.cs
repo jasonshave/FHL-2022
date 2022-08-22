@@ -1,5 +1,6 @@
 ﻿using CallingDashboard.Interfaces;
 using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
 
 namespace CallingDashboard.Repositories
 {
@@ -9,18 +10,27 @@ namespace CallingDashboard.Repositories
 
         public InMemoryRepository(IDictionary<string, T>? preData = null)
         {
-            if (preData is not null)
+            if (preData is null) return;
+            foreach (var (key, value) in preData)
             {
-                foreach (var (key, value) in preData)
-                {
-                    Add(key, value);
-                }
+                Add(key, value);
             }
         }
 
-        public void Add(string key, T value) => _data.TryAdd(key, value);
+        public bool Add(string key, T value) => _data.TryAdd(key, value);
 
-        public bool Remove(string key) => _data.TryRemove(key, out _);
+        public bool Remove(string key)
+        {
+            try
+            {
+                var result = _data.TryRemove(key, out _);
+                return result;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
 
         public T? Find(string key)
         {
@@ -31,12 +41,9 @@ namespace CallingDashboard.Repositories
         public bool Update(string key, T value)
         {
             var comparisonValue = Find(key);
-            if (comparisonValue is not null)
-            {
-                return _data.TryUpdate(key, value, comparisonValue);
-            }
-
-            return false;
+            return comparisonValue is not null 
+                ? _data.TryUpdate(key, value, comparisonValue) 
+                : Add(key, value);
         }
 
         public IEnumerable<T> List() => _data.Values;

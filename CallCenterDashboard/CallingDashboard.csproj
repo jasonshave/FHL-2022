@@ -8,18 +8,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Communication.CallingServer" Version="1.0.0-alpha.20220728.1" />
+    <PackageReference Include="Azure.Communication.CallingServer" Version="1.0.0-alpha.20220819.1" />
     <PackageReference Include="Azure.Communication.Common" Version="1.2.0-alpha.20220804.2" />
     <PackageReference Include="Azure.Communication.Identity" Version="1.1.0" />
+    <PackageReference Include="Azure.Communication.JobRouter" Version="1.0.0-alpha.20220819.1" />
     <PackageReference Include="Azure.Communication.PhoneNumbers" Version="1.0.1" />
     <PackageReference Include="Azure.Messaging.EventGrid" Version="4.11.0" />
+    <PackageReference Include="FluentValidation" Version="11.2.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.2.0" />
     <PackageReference Include="Fluxor.Blazor.Web" Version="5.4.0" />
-    <PackageReference Include="JasonShave.Azure.Communication.Service.EventHandler.CallingServer" Version="1.0.0-alpha-2022-07-31.1" />
+    <PackageReference Include="JasonShave.Azure.Communication.Service.EventHandler.CallAutomation" Version="1.0.0-alpha-2022-08-20.1" />
+    <PackageReference Include="JasonShave.Azure.Communication.Service.EventHandler.JobRouter" Version="1.0.0-alpha-2022-08-20.1" />
     <PackageReference Include="MudBlazor" Version="6.0.14" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Features\CallingServer\" />
+    <Folder Include="Validators\" />
     <Folder Include="Tools\" />
   </ItemGroup>
 

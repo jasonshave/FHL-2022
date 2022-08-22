@@ -1,0 +1,84 @@
+﻿@page "/jobRouter/jobs"
+@using Azure.Communication.JobRouter
+@using Azure.Communication.JobRouter.Models
+
+@inject RouterClient routerClient
+
+<PageTitle>Job Router Jobs</PageTitle>
+<MudBreadcrumbs Items="_items"/>
+<MudContainer>
+    <MudGrid Spacing="3" Justify="Justify.Center">
+        <MudItem xs="3">
+            <JobStatusCard Loading="_loading" Count="@(_jobs.Count(x => x.RouterJob.JobStatus == RouterJobStatus.Queued))" JobStatus="RouterJobStatus.Queued" JobStatusSelectionCallback="UpdateSelectedJobs"/>
+        </MudItem>
+        <MudItem xs="3">
+            <JobStatusCard Loading="_loading" Count="@(_jobs.Count(x => x.RouterJob.JobStatus == RouterJobStatus.Closed))" JobStatus="RouterJobStatus.Closed" JobStatusSelectionCallback="UpdateSelectedJobs"/>
+
+        </MudItem>
+        <MudItem xs="3">
+            <JobStatusCard Loading="_loading" Count="@(_jobs.Count(x => x.RouterJob.JobStatus == RouterJobStatus.Cancelled))" JobStatus="RouterJobStatus.Cancelled" JobStatusSelectionCallback="UpdateSelectedJobs"/>
+        </MudItem>
+    </MudGrid>
+    <MudPaper class="pa-4">
+        <MudText Typo="Typo.h5">
+            <MudIcon Icon="@Icons.Material.Filled.Work"/>
+            Jobs
+        </MudText>
+        @if (_loading)
+        {
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"/>
+        }
+        else
+        {
+            @foreach (var job in _selectedJobs)
+            {
+                <JobComponent Job="job"/>
+            }
+        }
+    </MudPaper>
+</MudContainer>
+
+@code {
+    readonly List<BreadcrumbItem> _items = new()
+    {
+        new BreadcrumbItem("Dashboard", href: "#"),
+        new BreadcrumbItem("Jobs", href: null, disabled: true)
+    };
+
+    int _elevation = 1;
+    bool _loading;
+    readonly List<RouterJobItem> _jobs = new();
+    readonly List<RouterJobItem> _selectedJobs = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+        await base.OnInitializedAsync();
+    }
+
+    async Task Refresh()
+    {
+        _loading = true;
+        var pages = routerClient.GetJobsAsync();
+        await foreach (var item in pages.AsPages())
+        {
+            _jobs.AddRange(item.Values);
+        }
+
+        _selectedJobs.AddRange(_jobs.Where(x => x.RouterJob.JobStatus == RouterJobStatus.Queued));
+
+        StateHasChanged();
+        _loading = false;
+    }
+
+    void UpdateSelectedJobs(RouterJobStatus routerJobStatus)
+    {
+        _selectedJobs.Clear();
+        _selectedJobs.AddRange(_jobs.Where(x => x.RouterJob.JobStatus == routerJobStatus));
+    }
+
+    void HandleMouseOver()
+    {
+        _elevation = 2;
+    }
+}
